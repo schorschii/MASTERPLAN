@@ -1,0 +1,4 @@
+Es ist ein neuer Abwesenheitsantrag vorhanden. Bitte prüfen Sie den Antrag und geben ihn ggf. frei.
+
+
+$$BASE_URL$$

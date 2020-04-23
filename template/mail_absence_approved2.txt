@@ -1,0 +1,4 @@
+Ihr Abwesenheitsantrag wurde genehmight.
+
+
+$$BASE_URL$$

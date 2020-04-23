@@ -1,0 +1,3 @@
+Die automatische Einladung für Ihren Dienst wurde zurückgezogen.
+
+$$BASE_URL$$

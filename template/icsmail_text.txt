@@ -1,0 +1,3 @@
+Dies ist eine automatische Einladung für Ihren Dienst.
+
+$$BASE_URL$$

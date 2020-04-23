@@ -1,0 +1,35 @@
+<?php
+
+///// GENERAL CONFIGURATION /////
+const WEB_ADDRESS        = 'https://your-server.local/';
+const TMP_FILES          = __DIR__.'/'.'tmp';
+const TEMPLATE_FILES     = __DIR__.'/'.'template';
+const LOCALE             = 'de_DE.UTF-8';
+const DATE_FORMAT        = '%e. %b %Y';
+const USERNAME_OVERRIDES = [
+	'root'  => 'SUPERADMIN',
+	'admin' => 'SUPERADMIN',
+];
+
+///// MySQL CONFIGURATION /////
+const DB_HOST = '127.0.0.1';
+const DB_NAME = 'masterplan';
+const DB_USER = 'masterplan';
+const DB_PASS = 'PASSWORD';
+
+///// LDAP CONFIGURATION (optional) /////
+/*
+ If you want to use LDAP user sync and login, please fill the following config lines.
+ Otherwise, please set LDAP_SERVER to "null".
+
+ To sync LDAP users with the MASTERPLAN database, please execute "php lib/ldapsync.php" (via Cron)
+
+ Set LDAP_SYNC_GROUP to "null" if you want to sync all users inside LDAP_QUERY_ROOT.
+ Otherwise, insert the LDAP path of the group.
+*/
+const LDAP_SERVER     = null; // Example: 'ldap://192.168.56.101'
+const LDAP_USER       = '';
+const LDAP_DOMAIN     = '';
+const LDAP_PASS       = '';
+const LDAP_QUERY_ROOT = ''; // Example: 'OU=Benutzer,DC=sieber,DC=systems'
+const LDAP_SYNC_GROUP = null; // Example: 'CN=MasterplanUsers,OU=Benutzer,DC=sieber,DC=systems'

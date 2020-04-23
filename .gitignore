@@ -1,0 +1,4 @@
+conf.php
+tmp/*
+!tmp/license
+!tmp/.placeholder

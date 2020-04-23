@@ -1,0 +1,4 @@
+Ihr Abwesenheitsantrag wurde ABGELEHNT.
+
+
+$$BASE_URL$$
