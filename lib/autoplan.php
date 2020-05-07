@@ -44,7 +44,7 @@ class autoplan {
 		// check user constraints
 		$wd = date('N', strtotime($day));
 		foreach($this->dbhandle->getUserConstraints($user_id) as $uc) {
-			if($uc->service_id == null || $uc->service_id = $service_id) {
+			if($uc->service_id == null || $uc->service_id == $service_id) {
 				if($wd == 1 && $uc->wd1 == 1) return false;
 				if($wd == 2 && $uc->wd2 == 1) return false;
 				if($wd == 3 && $uc->wd3 == 1) return false;
