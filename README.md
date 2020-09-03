@@ -15,6 +15,9 @@
 ## Installation, Konfiguration & Verwendung
 Bitte lesen Sie hierzu das PDF-Handbuch im Ordner "frontend/manual".
 
+## Upgrade auf eine neuere Version
+Bitte lesen Sie UPGRADE.md.
+
 ## Support & Cloud-Hosting
 Sie haben keinen eigenen Webserver oder benötigen Unterstützung bei Installation oder Betrieb? Kein Problem. Nutzen Sie einen bereitgestellten Zugang für eine monatliche Gebühr pro Mitarbeiter oder nehmen Sie den E-Mail-Support in Anspruch. Bitte [kontaktieren Sie mich](https://georg-sieber.de/?page=impressum).
 

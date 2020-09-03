@@ -16,7 +16,7 @@ echo "ldap_connect OK\n";
 ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
 ldap_set_option($ldapconn, LDAP_OPT_NETWORK_TIMEOUT, 5);
 ldap_set_option($ldapconn, LDAP_OPT_REFERRALS, 0 );
-$ldapbind = ldap_bind($ldapconn, LDAP_DOMAIN.'\\'.LDAP_USER, LDAP_PASS);
+$ldapbind = ldap_bind($ldapconn, LDAP_USER.'@'.LDAP_DOMAIN, LDAP_PASS);
 if(!$ldapbind) {
 	die("ldap_bind FAILED.".ldap_error($ldapconn)."\n");
 }

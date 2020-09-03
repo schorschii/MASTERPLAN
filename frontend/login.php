@@ -53,7 +53,7 @@ function validatePassword($userObject, $checkPassword) {
 		if(!$ldapconn) return false;
 		ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
 		ldap_set_option($ldapconn, LDAP_OPT_NETWORK_TIMEOUT, 3);
-		$ldapbind = @ldap_bind($ldapconn, LDAP_DOMAIN.'\\'.$userObject->login, $checkPassword);
+		$ldapbind = @ldap_bind($ldapconn, $userObject->login.'@'.LDAP_DOMAIN, $checkPassword);
 		if(!$ldapbind) return false;
 		return true;
 	} else {
