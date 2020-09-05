@@ -18,6 +18,9 @@ Bitte lesen Sie hierzu das PDF-Handbuch im Ordner "frontend/manual".
 ## Upgrade auf eine neuere Version
 Bitte lesen Sie UPGRADE.md.
 
+## Registrierung
+Sie können MASTERPLAN kostenfrei registrieren, um den Platzhalter "Beispielfirma Mustermann GmbH" im Programm durch Ihren realen Firmennamen zu erseten. Bitte nutzen Sie hierzu dieses Formular: https://apps.georg-sieber.de/masterplan/register.php
+
 ## Support & Cloud-Hosting
 Sie haben keinen eigenen Webserver oder benötigen Unterstützung bei Installation oder Betrieb? Kein Problem. Nutzen Sie einen bereitgestellten Zugang für eine monatliche Gebühr pro Mitarbeiter oder nehmen Sie den E-Mail-Support in Anspruch. Bitte [kontaktieren Sie mich](https://georg-sieber.de/?page=impressum).
 
