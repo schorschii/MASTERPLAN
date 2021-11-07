@@ -1,24 +1,35 @@
 <?php
 
 class license {
-	private $licenseContent = [];
-	private $userCount = 0;
 
-	public $licenseValid = false;
-	public $licenseCompany = 'Nicht lizenziert';
-	public $licenseUsers = 0;
+	const FREE_USERS          = 5;
+	const LICENSE_FILE        = TMP_FILES.'/'.'license';
+
+	private $licenseContent   = [];
+	private $userCount        = 0;
+
+	public $licenseValid      = false;
+	public $licenseCompany    = '';
+	public $licenseUsers      = 0;
 	public $licenseExpireTime = 0;
-	public $licenseText = '';
+	public $licenseText       = '';
 
 	function __construct($userCount) {
 		$this->userCount = $userCount;
-		$licenseFile = TMP_FILES.'/'.'license';
-		if(file_exists($licenseFile)) {
-			$fileContent = file_get_contents($licenseFile);
-			$this->licenseContent = json_decode($fileContent, true);
-			$this->parseLicenseContent();
+		if($this->userCount > self::FREE_USERS) {
+			if(file_exists(self::LICENSE_FILE)) {
+				$this->licenseValid = false;
+				$fileContent = file_get_contents(self::LICENSE_FILE);
+				$this->licenseContent = json_decode($fileContent, true);
+				$this->parseLicenseContent();
+			} else {
+				$this->licenseText = 'Keine Lizenzdatei gefunden';
+			}
 		} else {
-			$this->licenseText = 'Keine Lizenzdatei gefunden';
+			$this->licenseValid = true;
+			$this->licenseUsers = self::FREE_USERS;
+			$this->licenseCompany = 'Evaluationslizenz';
+			$this->licenseText = 'Sie verwenden die für 5 Benutzer kostenfreie Evaluationslizenz.';
 		}
 	}
 
@@ -38,7 +49,7 @@ class license {
 		$signature = base64_decode($this->licenseContent['signature']);
 		$result = openssl_verify($checkSum, $signature, PUBKEY);
 
-		if($result == 1) {
+		if($result) {
 			$timeLicenseExpire = $this->licenseContent['valid_until'];
 			if($timeLicenseExpire > time()) {
 				if($this->userCount <= $this->licenseUsers) {
@@ -51,11 +62,8 @@ class license {
 				$this->licenseText = "Ihre Lizenz ist am ".strftime(DATE_FORMAT, $timeLicenseExpire)." abgelaufen";
 			}
 		}
-		elseif($result == 0) {
-			$this->licenseText = "Die Signatur-Prüfung Ihrer Lizenzdatei ist fehlgeschlagen. Möglicherweise wurde sie manipuliert oder ist beschädigt.";
-		}
 		else {
-			$this->licenseText = "Bei der Signatur-Prüfung Ihrer Lizenzdatei ist ein unbekannter Fehler aufgetreten";
+			$this->licenseText = "Die Signatur-Prüfung Ihrer Lizenzdatei ist fehlgeschlagen. Möglicherweise wurde sie manipuliert oder ist beschädigt.";
 		}
 	}
 

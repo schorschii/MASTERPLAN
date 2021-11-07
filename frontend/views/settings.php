@@ -242,7 +242,7 @@ $prefillApiAllowedIps = $db->getSetting('api_allowed_ips');
 				<td><input type="file" name="license_file"></td>
 			</tr>
 			<tr>
-				<th></th>
+				<td><a href="https://georg-sieber.de/?page=masterplan" target="_blank">Lizenzen kaufen</a></td>
 				<td><button><img src='img/ok.svg'>&nbsp;Hochladen</button></td>
 			</tr>
 		</table>

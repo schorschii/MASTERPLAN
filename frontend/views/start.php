@@ -10,8 +10,10 @@ $userRosters = $db->getUserRosters($currentUser->id);
 	<div class='start subtitle'>web based open source workforce management</div>
 	<br>
 	<div class='infobox gray hint'>
+		<?php if($lic->licenseUsers <= license::FREE_USERS) { ?>
 		Wenn Sie diese Software im Produktivbetrieb einsetzen, denken Sie bitte über eine Spende über den <a target='_blank' href='https://github.com/schorschii/masterplan'>Spendenbutton auf GitHub</a> nach, um die Weiterentwicklung zu finanzieren.
 		<br><br>
+		<?php } ?>
 		Kommerzieller Support sowie Weiterentwicklungen sind auf Angebotsbasis möglich. Bitte nehmen Sie <a target='_blank' href='https://georg-sieber.de/?page=impressum'>Kontakt</a> auf.
 	</div>
 </div>
