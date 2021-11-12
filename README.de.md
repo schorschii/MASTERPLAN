@@ -13,7 +13,7 @@
 - Integration in Ihr Corporate Design (CD) möglich.
 - Programm-Anpassungen an Ihre Bedürfnisse auf Angebotsbasis möglich - wenn Sie eine Funktion vermissen nehmen Sie einfach Kontakt auf.
 
-## System Requirements
+## Systemanforderungen
 ### Client
 Folgende Webbrowser werden unterstützt, sofern JavaScript aktiviert ist.
 - Google Chrome / Chromium, ab Version 70 (oder neuer)
@@ -27,13 +27,13 @@ Folgende Webbrowser werden im Moment explizit **nicht** unterstützt.
 - Apple Safari (alle Versionen)
 
 ### Server
-Speicherbedarf
+#### Speicherbedarf
 - 10 MiB Festplattenspeicher für die MASTERPLAN-Anwendung
 - plus Speicherplatz für die (anwachsende) Datenbank
   - schätzungsweise 0,2 MiB pro Mitarbeiter und Monat
 - mind. 128 MiB PHP memory_limit
 
-Software
+#### Software
 - Betriebssystem: beliebige Linux-Distribution, Empfehlung: Debian
 - Webserver: Apache 2 + PHP 7 (oder neuer) mit Modulen: LDAP, GD
 - Datenbanksystem: MySQL oder MariaDB
