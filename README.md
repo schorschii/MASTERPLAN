@@ -55,7 +55,7 @@ The following web browsers are explicitly **not** supported at the moment.
    2. *(optional)* If you want to use the LDAP-Sync, please fill in the following constants accordingly: `LDAP_SERVER`,` LDAP_USER`, `LDAP_DOMAIN`,` LDAP_PASS`, `LDAP_QUERY_ROOT`,` LDAP_SYNC_GROUP`.
 6. Grant the web server user (`www-data`) write permissions recursively for the directories` tmp` and `template` within your MASTERPLAN installation.
    ```
-   cd / var / www / masterplan
+   cd /var/www/masterplan
    chown -R www-data tmp && chmod 0755 tmp
    chown -R www-data template && chmod 0755 template
    ```
