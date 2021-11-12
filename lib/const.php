@@ -1,7 +1,7 @@
 <?php
 
-const VERSION = '1.1.2';
-const BUILD   = 4;
+const VERSION = '1.2.0';
+const BUILD   = 5;
 
 const PUBKEY  = '
 -----BEGIN PUBLIC KEY-----
