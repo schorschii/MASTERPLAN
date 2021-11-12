@@ -10,14 +10,14 @@ if(isset($_POST['action'])) {
 
 		$ps = $db->getPlannedService($_POST['id']);
 		if(!$perm->isUserAdminForRoster($currentUser, $ps->service_roster_id)) {
-			die('Sie besitzen keine Admin-Rechte für diesen Dienstplan');
+			die(LANG['no_admin_rights_for_this_roster']);
 		}
 
 		$plan = new plan($db);
 		if($plan->removeAssignment($ps->id)) {
 			die('OK');
 		} else {
-			die('Dienstzuweisung konnte nicht entfernt werden: '.$db->getLastStatement()->error);
+			die(LANG['error'].': '.$db->getLastStatement()->error);
 		}
 
 	}
@@ -27,13 +27,13 @@ if(isset($_POST['action'])) {
 		if($plannedServiceFile != null) {
 			$service = $db->getService($plannedServiceFile->service_id);
 			if(!$perm->isUserAdminForRoster($currentUser, $service->roster_id)) {
-				die('Sie besitzen keine Admin-Rechte für diesen Dienstplan');
+				die(LANG['no_admin_rights_for_this_roster']);
 			}
 
 			if($db->removePlannedServiceFile($plannedServiceFile->id)) {
 				die('OK');
 			} else {
-				die('Datei konnte nicht entfernt werden: '.$db->getLastStatement()->error);
+				die(LANG['error'].': '.$db->getLastStatement()->error);
 			}
 		}
 
@@ -44,13 +44,13 @@ if(isset($_POST['action'])) {
 		if($plannedServiceResource != null) {
 			$service = $db->getService($plannedServiceResource->service_id);
 			if(!$perm->isUserAdminForRoster($currentUser, $service->roster_id)) {
-				die('Sie besitzen keine Admin-Rechte für diesen Dienstplan');
+				die(LANG['no_admin_rights_for_this_roster']);
 			}
 
 			if($db->removePlannedServiceResource($plannedServiceResource->id)) {
 				die('OK');
 			} else {
-				die('Ressource konnte nicht entfernt werden: '.$db->getLastStatement()->error);
+				die(LANG['error'].': '.$db->getLastStatement()->error);
 			}
 		}
 

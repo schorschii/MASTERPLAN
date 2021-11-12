@@ -2,6 +2,12 @@
 
 class license {
 
+	/* LEGAL WARNING
+	   It is not allowed to modify this file in order to bypass license checks.
+	   I decided to not use obfuscation techniques because they suck, so yeah, it's technically easy to bypass the check.
+	   Please be so kind and support further development by purchasing licenses from https://georg-sieber.de
+	*/
+
 	const FREE_USERS          = 5;
 	const LICENSE_FILE        = TMP_FILES.'/'.'license';
 
@@ -23,20 +29,20 @@ class license {
 				$this->licenseContent = json_decode($fileContent, true);
 				$this->parseLicenseContent();
 			} else {
-				$this->licenseText = 'Keine Lizenzdatei gefunden';
+				$this->licenseText = LANG['no_license_file_found'];
 			}
 		} else {
 			$this->licenseValid = true;
 			$this->licenseUsers = self::FREE_USERS;
-			$this->licenseCompany = 'Evaluationslizenz';
-			$this->licenseText = 'Sie verwenden die für 5 Benutzer kostenfreie Evaluationslizenz.';
+			$this->licenseCompany = LANG['evaluation_license'];
+			$this->licenseText = LANG['you_are_using_the_evaluation_license'];
 		}
 	}
 
 	private function parseLicenseContent() {
 		if(!isset($this->licenseContent['users'])
 		|| !isset($this->licenseContent['valid_until'])) {
-			$this->licenseText = 'Die hochgeladene Lizenzdatei ist keine valide MASTERPLAN-Lizenzdatei';
+			$this->licenseText = LANG['invalid_license_file'];
 			return;
 		}
 
@@ -54,16 +60,16 @@ class license {
 			if($timeLicenseExpire > time()) {
 				if($this->userCount <= $this->licenseUsers) {
 					$this->licenseValid = true;
-					$this->licenseText = "Ihre Lizenz für ".$this->licenseUsers." Benutzer ist bis zum ".strftime(DATE_FORMAT, $timeLicenseExpire)." gültig";
+					$this->licenseText = str_replace('%1', $this->licenseUsers, str_replace('%2', strftime(DATE_FORMAT, $timeLicenseExpire), LANG['license_of_users_is_valid_to']));
 				} else {
-					$this->licenseText = "Ihre derzeitige Benutzeranzahl (".$this->userCount.") übersteigt die lizenzierten ".$this->licenseUsers." Benutzer";
+					$this->licenseText = str_replace('%1', $this->userCount, str_replace('%2', $this->licenseUsers, LANG['user_count_exeeds_license_limit']));
 				}
 			} else {
-				$this->licenseText = "Ihre Lizenz ist am ".strftime(DATE_FORMAT, $timeLicenseExpire)." abgelaufen";
+				$this->licenseText = str_replace('%1', strftime(DATE_FORMAT, $timeLicenseExpire), LANG['license_expired_on']);
 			}
 		}
 		else {
-			$this->licenseText = "Die Signatur-Prüfung Ihrer Lizenzdatei ist fehlgeschlagen. Möglicherweise wurde sie manipuliert oder ist beschädigt.";
+			$this->licenseText = LANG['invalid_license_file'];
 		}
 	}
 

@@ -25,12 +25,13 @@ foreach($allPlannedServices as $ps) {
 // release service for swap if requested
 if(isset($_POST['action'])) {
 	if($_POST['action'] == 'swapservice'
-	&& !empty($_POST['id'])) {
+	&& !empty($_POST['id']
+	&& $showSwap)) {
 		// check if planned service is still owned by this user
 		$plannedService = $db->getPlannedService($_POST['id']);
 		if($plannedService != null && $plannedService->user_id == $currentUser->id) {
 			if($db->updateSwapService(null, $_POST['id'], $_POST['comment'])) {
-				$info = 'Dienst wurde zum Tausch freigegeben. Sie sind weiterhin im Dienstplan eingetragen, bis ein Tauschpartner zugestimmt hat.';
+				$info = LANG['service_released_for_swap'];
 				$infoclass = 'green';
 
 				// send mail to roster users
@@ -39,11 +40,11 @@ if(isset($_POST['action'])) {
 					$mailer->mailNewSwap($plannedService->service_roster_id);
 				}
 			} else {
-				$info = 'Tauschgesuch konnte nicht erstellt werden: '.$db->getLastStatement()->error;
+				$info = LANG['error'].': '.$db->getLastStatement()->error;
 				$infoclass = 'red';
 			}
 		} else {
-			$info = 'Tauschgesuch konnte nicht erstellt werden, da der Dienst Ihnen nicht mehr zugeordnet ist';
+			$info = LANG['service_could_not_be_released_for_swap_service_not_assigned_to_you'];
 			$infoclass = 'yellow';
 		}
 	}
@@ -51,20 +52,20 @@ if(isset($_POST['action'])) {
 ?>
 
 <div class="contentbox">
-	<h2>Meine kommenden Dienste</h2>
+	<h2><?php echo LANG['my_future_services']; ?></h2>
 	<?php if($info != null) { ?>
 		<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
 	<?php } ?>
 	<?php if(count($plannedServices) == 0) { ?>
-		<div class="infobox">Im Moment sind Ihnen keine Dienste zugeteilt</div>
+		<div class="infobox"><?php echo LANG['no_services_assigned_to_you']; ?></div>
 	<?php } else { ?>
 	<table class="data plan nocolumnlines">
 		<tr>
-			<th>Tag</th>
-			<th>Dienstplan</th>
-			<th>Dienst</th>
+			<th><?php echo LANG['day']; ?></th>
+			<th><?php echo LANG['roster']; ?></th>
+			<th><?php echo LANG['service']; ?></th>
 			<?php if($showSwap) { ?>
-			<th>Aktion</th>
+			<th><?php echo LANG['action']; ?></th>
 			<?php } ?>
 		</tr>
 		<?php
@@ -91,10 +92,10 @@ if(isset($_POST['action'])) {
 							<input type="hidden" name="action" value="swapservice">
 							<input type="hidden" name="id" value="<?php echo $ps->id; ?>">
 							<input type="hidden" name="comment" id="iptComment" value="">
-							<button><img src="img/swap.svg">&nbsp;Zum Tausch freigeben</button>
+							<button><img src="img/swap.svg">&nbsp;<?php echo LANG['release_for_swap']; ?></button>
 						</form>
 					<?php } else { ?>
-						<button disabled="true"><img src="img/swap.svg">&nbsp;Zum Tausch freigegeben</button>
+						<button disabled="true"><img src="img/swap.svg">&nbsp;<?php echo LANG['release_for_swap']; ?></button>
 					<?php } ?>
 					</td>
 				<?php } ?>
@@ -105,7 +106,7 @@ if(isset($_POST['action'])) {
 
 <script>
 function swap() {
-	var comment = prompt('Möchten Sie ein Kommentar zum Tauschgesuch hinzufügen?');
+	var comment = prompt('<?php echo LANG['add_note_to_swap']; ?>');
 	if(comment == null) return false;
 	else iptComment.value = comment;
 	return true;

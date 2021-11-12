@@ -6,19 +6,19 @@ $infoclass = null;
 if(!isset($currentUser)) die();
 
 if($currentUser->ldap > 0) {
-	die('<div class="infobox yellow">Sie sind mit einem LDAP-Account angemeldet. Bitte ändern Sie Ihr Kennwort über Ihren Verzeichnisdienst.</div>');
+	die('<div class="infobox yellow">'.LANG['unable_to_change_password_ldap'].'</div>');
 }
 
 if(isset($_POST['old_pw']) && isset($_POST['new_pw']) && isset($_POST['confirm_pw'])) {
 	$error = false;
 
 	if(!$error) if(!password_verify($_POST['old_pw'], $currentUser->password)) {
-		$info = 'Altes Kennwort nicht korrekt';
+		$info = LANG['old_password_not_correct'];
 		$infoclass = 'red';
 		$error = true;
 	}
 	if(!$error) if($_POST['new_pw'] != $_POST['confirm_pw']) {
-		$info = 'Neue Kennwörter stimmen nicht überein';
+		$info = LANG['passwords_do_not_match'];
 		$infoclass = 'red';
 		$error = true;
 	}
@@ -27,10 +27,10 @@ if(isset($_POST['old_pw']) && isset($_POST['new_pw']) && isset($_POST['confirm_p
 		$currentUser->id,
 		password_hash($_POST['new_pw'], PASSWORD_DEFAULT)
 	)) {
-		$info = 'Kennwort geändert';
+		$info = LANG['password_changed'];
 		$infoclass = 'green';
 	} else {
-		$info = 'Kennwort konnte nicht geändert werden: '.$db->getLastStatement()->error;
+		$info = LANG['password_could_not_be_changed'].' '.$db->getLastStatement()->error;
 		$infoclass = 'red';
 	}
 }
@@ -42,26 +42,26 @@ if(isset($_POST['old_pw']) && isset($_POST['new_pw']) && isset($_POST['confirm_p
 	<form method="POST" class="marginbottom">
 		<table>
 			<tr>
-				<th>Aktuelles Kennwort:</th>
+				<th><?php echo LANG['current_password']; ?>:</th>
 				<td>
 					<input type="password" name="old_pw" autofocus="true">
 				</td>
 			</tr>
 			<tr>
-				<th>Neues Kennwort:</th>
+				<th><?php echo LANG['new_password']; ?>:</th>
 				<td>
 					<input type="password" name="new_pw" value="">
 				</td>
 			</tr>
 			<tr>
-				<th>Kennwort wiederholen:</th>
+				<th><?php echo LANG['repeat_password']; ?>:</th>
 				<td>
 					<input type="password" name="confirm_pw" value="">
 				</td>
 			</tr>
 			<tr>
 				<th></th>
-				<td><button><img src='img/ok.svg'>&nbsp;Ändern</button></td>
+				<td><button><img src='img/ok.svg'>&nbsp;<?php echo LANG['change']; ?></button></td>
 			</tr>
 		</table>
 	</form>

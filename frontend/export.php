@@ -18,7 +18,7 @@ if(isset($_GET['export']) && isset($_GET['type'])) {
 				die();
 			}
 		} else {
-			die('Sie besitzen keine Leserechte für den angeforderten Dienstplan');
+			die(LANG['permission_error']);
 		}
 	}
 	elseif($_GET['export'] == 'userServices' && !empty($_GET['roster']) && !empty($_GET['week'])) {
@@ -31,7 +31,7 @@ if(isset($_GET['export']) && isset($_GET['type'])) {
 				die();
 			}
 		} else {
-			die('Sie besitzen keine Leserechte für den angeforderten Dienstplan');
+			die(LANG['permission_error']);
 		}
 	}
 	elseif($_GET['export'] == 'freeUsers' && !empty($_GET['roster']) && !empty($_GET['week'])) {
@@ -44,7 +44,7 @@ if(isset($_GET['export']) && isset($_GET['type'])) {
 				die();
 			}
 		} else {
-			die('Sie besitzen keine Leserechte für den angeforderten Dienstplan');
+			die(LANG['permission_error']);
 		}
 	}
 	elseif($_GET['export'] == 'absence' && !empty($_GET['user'])) {
@@ -57,7 +57,7 @@ if(isset($_GET['export']) && isset($_GET['type'])) {
 				die();
 			}
 		} else {
-			die('Sie besitzen keine Leserechte');
+			die(LANG['permission_error']);
 		}
 	}
 }

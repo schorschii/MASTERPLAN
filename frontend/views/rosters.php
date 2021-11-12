@@ -5,26 +5,26 @@ $infoclass = null;
 // rights check
 if(!isset($currentUser)) die();
 if($currentUser->superadmin == 0) {
-	die('<div class="infobox red">Sie benötigen Superadmin-Berechtigungen um diese Seite aufzurufen</div>');
+	die('<div class="infobox red">'.LANG['page_superadmin_right_needed'].'</div>');
 }
 
 if(!empty($_POST['action'])) {
 	if($_POST['action'] == 'removeRoster' && !empty($_POST['id'])) {
 		if($db->removeRoster($_POST['id'])) {
-			$info = "Der Dienstplan und zugehörige Dienste wurden gelöscht";
-			$infoclass = "green";
+			$info = LANG['roster_and_services_removed'];
+			$infoclass = 'green';
 		} else {
-			$info = "Der Dienstplan konnte nicht gelöscht werden";
-			$infoclass = "red";
+			$info = LANG['error'].': '.$db->getLastStatement()->error;
+			$infoclass = 'red';
 		}
 	}
 	elseif($_POST['action'] == 'removeService' && !empty($_POST['id'])) {
 		if($db->removeService($_POST['id'])) {
-			$info = "Der Dienst wurde gelöscht";
+			$info = LANG['service_removed'];
 			$infoclass = "green";
 		} else {
-			$info = "Der Dienst konnte nicht gelöscht werden";
-			$infoclass = "red";
+			$info = LANG['error'].': '.$db->getLastStatement()->error;
+			$infoclass = 'red';
 		}
 	}
 }
@@ -47,7 +47,7 @@ function copyServices() {
 </script>
 
 <div class='contentbox'>
-<h2>Vorhandene Dienstpläne und Dienste</h2>
+<h2><?php echo LANG['existing_rosters_and_services']; ?></h2>
 <?php if($info != null) { ?>
 	<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
 <?php } ?>
@@ -55,18 +55,18 @@ function copyServices() {
 <div class="toolbar marginbottom">
 	<form method="GET" class="inlineblock">
 		<input type="hidden" name="view" value="editRoster">
-		<button title='Neuer Dienstplan'><img src='img/add.svg'>&nbsp;Dienstplan</button>
+		<button><img src='img/add.svg'>&nbsp;<?php echo LANG['roster']; ?></button>
 	</form>
 	<form method="GET" class="inlineblock">
 		<input type="hidden" name="view" value="editService">
-		<button title='Neuer Dienst'><img src='img/add.svg'>&nbsp;Dienst</button>
+		<button><img src='img/add.svg'>&nbsp;<?php echo LANG['service']; ?></button>
 	</form>
 	<form method="GET" class="inlineblock">
-		<button type='button' onclick='copyServices()' class="inlineblock"><img src='img/copy.svg'>&nbsp;Markierte Dienste kopieren</button>
+		<button type='button' onclick='copyServices()' class="inlineblock"><img src='img/copy.svg'>&nbsp;<?php echo LANG['copy_selected_services']; ?></button>
 	</form>
 	<form method="GET" class="inlineblock">
 		<input type="hidden" name="view" value="holidays">
-		<button title='Schließtage/Feiertage definieren'><img src='img/holiday.svg'>&nbsp;Schließtage definieren</button>
+		<button><img src='img/holiday.svg'>&nbsp;<?php echo LANG['define_holidays']; ?></button>
 	</form>
 </div>
 
@@ -79,19 +79,19 @@ foreach($db->getRosters() as $r) {
 		. "<form method='GET' action='index.php' class='marginleft'>"
 		.  "<input type='hidden' name='view' value='assignUsersToRoster'>"
 		.  "<input type='hidden' name='roster' value='".$r->id."'>"
-		.  "<button title='Benutzer zuweisen'><img src='img/users.svg'></button>"
+		.  "<button title='".LANG['assign_employee']."'><img src='img/users.svg'></button>"
 		. "</form>"
 		. "</th>"
-		. "<th>Start</th>"
-		. "<th>Ende</th>"
-		. "<th>Gültig ab</th>"
-		. "<th>Gültig bis</th>"
+		. "<th>".LANG['begin']."</th>"
+		. "<th>".LANG['end']."</th>"
+		. "<th>".LANG['valid_from']."</th>"
+		. "<th>".LANG['valid_to']."</th>"
 		. "<th class='wrapcontent'>"
-		. "<a class='button' href='?view=editRoster&id=".$r->id."'><img src='img/edit.svg'></a>"
-		. "<form method='POST' onsubmit='return confirm(\"Möchten Sie den kompletten Dienstplan einschließlich dessen Dienste löschen?\")'>"
+		. "<a class='button' href='?view=editRoster&id=".$r->id."' title='".LANG['edit']."'><img src='img/edit.svg'></a>"
+		. "<form method='POST' onsubmit='return confirm(\"".LANG['confirm_remove_complete_roster_including_services']."\")'>"
 		. "<input type='hidden' name='action' value='removeRoster'>"
 		. "<input type='hidden' name='id' value='".$r->id."'>"
-		. "<button><img src='img/delete.svg'></button>"
+		. "<button title='".LANG['remove']."'><img src='img/delete.svg'></button>"
 		. "</form>"
 		. "</th>"
 		. "</tr>";
@@ -117,11 +117,11 @@ foreach($db->getRosters() as $r) {
 		echo "<td>".htmlspecialchars(strftime(DATE_FORMAT,strtotime($s->date_start)))."</td>";
 		echo "<td>".htmlspecialchars(strftime(DATE_FORMAT,strtotime($s->date_end)))."</td>";
 		echo "<td class='wrapcontent'>"
-			. "<a class='button' href='?view=editService&id=".$s->id."'><img src='img/edit.svg'></a>"
-			. "<form method='POST' onsubmit='return confirm(\"Möchten Sie diesen Dienst löschen?\")'>"
+			. "<a class='button' href='?view=editService&id=".$s->id."' title='".LANG['edit']."'><img src='img/edit.svg'></a>"
+			. "<form method='POST' onsubmit='return confirm(\"".LANG['confirm_remove_service']."\")'>"
 			. "<input type='hidden' name='action' value='removeService'>"
 			. "<input type='hidden' name='id' value='".$s->id."'>"
-			. "<button><img src='img/delete.svg'></button>"
+			. "<button title='".LANG['remove']."'><img src='img/delete.svg'></button>"
 			. "</form>"
 			. "</td>";
 		echo "</tr>";

@@ -50,42 +50,42 @@ if(isset($_POST['service']) && isset($_POST['day']) && isset($_POST['user'])) {
 							echo "<script>self.close()</script>";
 							die();
 						} else {
-							$info = 'Benutzer konnte nicht zugeordnet werden: '.$db->getLastStatement()->error;
+							$info = LANG['error'].': '.$db->getLastStatement()->error;
 							$infoclass = 'red';
 						}
 
 					} else {
-						$info = 'Der Mitarbeiter "'.htmlspecialchars($db->getUser($_POST['user'])->fullname).'" kann nicht für diesen Dienst eingeteilt werden, da er am Tag zuvor für einen Spätdienst eingesetzt ist und die Ruhezeit verletzt werden würde. Führen Sie den Vorgang erneut aus, um die Einteilung zu erzwingen.';
+						$info = str_replace('%1', htmlspecialchars($db->getUser($_POST['user'])->fullname), LANG['employee_could_not_be_deployed_rest_period']);
 						$infoclass = 'yellow';
 						$forceNext = 4;
 					}
 
 				} else {
-					$info = 'Der Mitarbeiter "'.htmlspecialchars($db->getUser($_POST['user'])->fullname).'" kann aufgrund aufgrund von Überlastung nicht für diesen Dienst eingeteilt werden. Führen Sie den Vorgang erneut aus, um die Einteilung zu erzwingen.';
+					$info = str_replace('%1', htmlspecialchars($db->getUser($_POST['user'])->fullname), LANG['employee_could_not_be_deployed_overload']);
 					$infoclass = 'yellow';
 					$forceNext = 3;
 				}
 
 			} else {
-				$info = 'Der Mitarbeiter "'.htmlspecialchars($db->getUser($_POST['user'])->fullname).'" kann nicht für diesen Dienst eingeteilt werden, da er bereits zur gleichen Zeit für einen anderen Dienst eingetragen ist. Führen Sie den Vorgang erneut aus, um die Einteilung zu erzwingen.';
+				$info = str_replace('%1', htmlspecialchars($db->getUser($_POST['user'])->fullname), LANG['employee_could_not_be_deployed_assigned_to_service_same_time']);
 				$infoclass = 'yellow';
 				$forceNext = 2;
 			}
 
 		} else {
-			$info = 'Der Mitarbeiter "'.htmlspecialchars($db->getUser($_POST['user'])->fullname).'" kann aufgrund einer Beschränkung oder einer eingetragenen Abwesenheit nicht für diesen Dienst eingeteilt werden. Führen Sie den Vorgang erneut aus, um die Einteilung zu erzwingen.';
+			$info = str_replace('%1', htmlspecialchars($db->getUser($_POST['user'])->fullname), LANG['employee_could_not_be_deployed_constraint_or_absence']);
 			$infoclass = 'yellow';
 			$forceNext = 1;
 		}
 
 	} else {
-		$info = 'Sie besitzen keine Admin-Rechte für diesen Dienstplan';
+		$info = LANG['no_admin_rights_for_this_roster'];
 		$infoclass = 'yellow';
 	}
 }
 ?>
 <div class="contentbox small">
-	<h2>Mitarbeiter zuweisen</h2>
+	<h2><?php echo LANG['assign_employee']; ?></h2>
 	<?php if($info != null) { ?>
 		<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
 	<?php } ?>
@@ -96,21 +96,21 @@ if(isset($_POST['service']) && isset($_POST['day']) && isset($_POST['user'])) {
 		<?php } ?>
 		<table>
 			<tr>
-				<th>Tag:</th>
+				<th><?php echo LANG['day']; ?>:</th>
 				<td>
 					<input type="hidden" name="day" value="<?php echo htmlspecialchars($day); ?>">
 					<input type="text" disabled="true" value="<?php echo htmlspecialchars( strftime(DATE_FORMAT, strtotime($day)) ); ?>">
 				</td>
 			</tr>
 			<tr>
-				<th>Dienst:</th>
+				<th><?php echo LANG['service']; ?>:</th>
 				<td>
 					<input type="hidden" name="service" value="<?php echo $service->id; ?>">
 					<input type="text" disabled="true" value="<?php echo htmlspecialchars($service->shortname)." ".htmlspecialchars($service->title); ?>">
 				</td>
 			</tr>
 			<tr>
-				<th>Mitarbeiter:</th>
+				<th><?php echo LANG['employee']; ?>:</th>
 				<td>
 					<select name="user" autofocus="true">
 						<?php
@@ -124,7 +124,7 @@ if(isset($_POST['service']) && isset($_POST['day']) && isset($_POST['user'])) {
 			</tr>
 			<tr>
 				<th></th>
-				<td><button><img src='img/ok.svg'>&nbsp;Zuweisen</button></td>
+				<td><button><img src='img/ok.svg'>&nbsp;<?php echo LANG['assign']; ?></button></td>
 			</tr>
 		</table>
 	</form>

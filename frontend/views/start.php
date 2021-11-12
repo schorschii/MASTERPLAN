@@ -7,14 +7,14 @@ $userRosters = $db->getUserRosters($currentUser->id);
 
 <div class='contentbox small'>
 	<img id='logo' src='img/logo.png'>
-	<div class='start subtitle'>web based open source workforce management</div>
+	<div class='start subtitle'><?php LANG['app_subtitle']; ?></div>
 	<br>
 	<div class='infobox gray hint'>
 		<?php if($lic->licenseUsers <= license::FREE_USERS) { ?>
-		Wenn Sie diese Software im Produktivbetrieb einsetzen, denken Sie bitte über eine Spende über den <a target='_blank' href='https://github.com/schorschii/masterplan'>Spendenbutton auf GitHub</a> nach, um die Weiterentwicklung zu finanzieren.
-		<br><br>
+			<?php echo LANG['donation_note']; ?>
+			<br><br>
 		<?php } ?>
-		Kommerzieller Support sowie Weiterentwicklungen sind auf Angebotsbasis möglich. Bitte nehmen Sie <a target='_blank' href='https://georg-sieber.de/?page=impressum'>Kontakt</a> auf.
+		<?php echo LANG['commercial_support_note']; ?>
 	</div>
 </div>
 
@@ -27,13 +27,13 @@ $userRosters = $db->getUserRosters($currentUser->id);
 <?php } ?>
 
 <?php if($currentUser->superadmin > 0) { ?>
-	<div class='infobox yellow'>Sie besitzen Superadmin-Rechte!</div>
+	<div class='infobox yellow'><?php echo LANG['you_have_superadmin_rights']; ?></div>
 <?php } ?>
 
 <?php if(count($adminRosters) > 0) { ?>
 	<div class='contentbox small'>
 		<div class='infobox'>
-			Sie besitzen Admin-Rechte für folgende Dienstpläne:
+			<?php echo LANG['you_have_admin_rights_for_following_rosters']; ?>
 			<ul>
 				<?php foreach($adminRosters as $ar) {
 					echo '<li>'.htmlspecialchars($ar->roster_title).'</li>';
@@ -46,7 +46,7 @@ $userRosters = $db->getUserRosters($currentUser->id);
 <?php if(count($userRosters) > 0) { ?>
 	<div class='contentbox small'>
 		<div class='infobox'>
-			Sie sind folgenden Dienstplänen zugeteilt:
+			<?php echo LANG['you_are_assigned_to_the_following_rosters']; ?>
 			<ul>
 				<?php foreach($userRosters as $ar) {
 					echo '<li>'.htmlspecialchars($ar->roster_title).'</li>';

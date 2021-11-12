@@ -5,7 +5,7 @@ $infoclass = null;
 // rights check
 if(!isset($currentUser)) die();
 if($currentUser->superadmin == 0) {
-	die('<div class="infobox red">Sie benötigen Superadmin-Berechtigungen um diese Seite aufzurufen</div>');
+	die('<div class="infobox red">'.LANG['page_superadmin_right_needed'].'</div>');
 }
 
 $services = [];
@@ -18,7 +18,7 @@ foreach(explode(',',$_GET['services']) as $service_id) {
 	}
 }
 if(count($services) == 0)
-	die('<div class="infobox red">Keine Dienste ausgewählt</div>');
+	die('<div class="infobox red">'.LANG['no_services_selected'].'</div>');
 
 if(!empty($_POST['roster'])) {
 	$success = null;
@@ -38,20 +38,20 @@ if(!empty($_POST['roster'])) {
 		die();
 	} else {
 		$db->rollbackTransaction();
-		$info = 'Dienste konnten nicht kopiert werden: '.$db->getLastStatement()->error;
+		$info = LANG['services_could_not_be_copied'].' '.$db->getLastStatement()->error;
 		$infoclass = 'red';
 	}
 }
 ?>
 <div class="contentbox small">
-	<h2>Dienste kopieren</h2>
+	<h2><?php echo LANG['copy_services']; ?></h2>
 	<?php if($info != null) { ?>
 		<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
 	<?php } ?>
 	<form method="POST" class="marginbottom">
 		<table>
 			<tr>
-				<th>Ziel-Dienstplan:</th>
+				<th><?php echo LANG['target_roster']; ?>:</th>
 				<td>
 					<select name="roster">
 						<?php foreach($db->getRosters() as $r) {
@@ -61,26 +61,26 @@ if(!empty($_POST['roster'])) {
 				</td>
 			</tr>
 			<tr>
-				<th>Ausgewählte Dienste:</th>
+				<th><?php echo LANG['selected_services']; ?>:</th>
 				<td>
 					<input type="text" disabled="true" value="<?php echo count($services); ?>">
 				</td>
 			</tr>
 			<tr>
-				<th>Suffix anhängen:</th>
+				<th><?php echo LANG['append_suffix']; ?>:</th>
 				<td><input type="text" name="suffix" value="2"></td>
 			</tr>
 			<tr>
-				<th>Gültig ab:</th>
+				<th><?php echo LANG['valid_from']; ?>:</th>
 				<td><input type="date" name="date_start"></td>
 			</tr>
 			<tr>
-				<th>Gültig bis:</th>
+				<th><?php echo LANG['valid_to']; ?>:</th>
 				<td><input type="date" name="date_end"></td>
 			</tr>
 			<tr>
 				<th></th>
-				<td><button><img src='img/ok.svg'>&nbsp;Kopieren</button></td>
+				<td><button><img src='img/ok.svg'>&nbsp;<?php echo LANG['copy_services']; ?></button></td>
 			</tr>
 		</table>
 	</form>

@@ -5,7 +5,7 @@ $infoclass = null;
 // rights check
 if(!isset($currentUser)) die();
 if($currentUser->superadmin == 0) {
-	die('<div class="infobox red">Sie benötigen Superadmin-Berechtigungen um diese Seite aufzurufen</div>');
+	die('<div class="infobox red">'.LANG['page_superadmin_right_needed'].'</div>');
 }
 
 // create/update
@@ -42,11 +42,11 @@ if(($result==null || $result) && isset($_POST['api_allowed_ips'])) {
 }
 if($result != null) {
 	if($result) {
-		$info = "Einstellungen gespeichert";
-		$infoclass = "green";
+		$info = LANG['settings_saved'];
+		$infoclass = 'green';
 	} else {
-		$info = "Einstellungen konnten nicht gespeichert werden";
-		$infoclass = "red";
+		$info = LANG['error'].': '.$db->getLastStatement()->error;
+		$infoclass = 'red';
 	}
 }
 
@@ -59,11 +59,11 @@ if(isset($_POST['remove_bg_img']) && $_POST['remove_bg_img']) {
 }
 if(isset($_FILES['bg_img'])) {
 	if(move_uploaded_file($_FILES["bg_img"]["tmp_name"], $bgfile)) {
-		$info = "Bild gespeichert - bitte leeren Sie Ihren Browsercache, falls das neue Bild beim nächsten Seitenaufruf noch nicht angezeigt wird";
-		$infoclass = "green";
+		$info = LANG['background_image_saved'];
+		$infoclass = 'green';
 	} else {
-		$info = "Bild konnten nicht gespeichert werden - bitte stellen Sie sicher, dass der Webserver-Benutzer Schreibrechte auf das /tmp-Verzeichnis innerhalb der MASTERPLAN-Installation hat";
-		$infoclass = "red";
+		$info = LANG['background_image_could_not_be_saved'];
+		$infoclass = 'red';
 	}
 }
 
@@ -74,8 +74,8 @@ if(isset($_FILES['license_file'])) {
 		header('Location: index.php?view=settings');
 		die();
 	} else {
-		$info = "Lizenzdatei konnten nicht gespeichert werden - bitte stellen Sie sicher, dass der Webserver-Benutzer Schreibrechte auf das /tmp-Verzeichnis innerhalb der MASTERPLAN-Installation hat";
-		$infoclass = "red";
+		$info = LANG['license_file_could_not_be_saved'];
+		$infoclass = 'red';
 	}
 }
 
@@ -97,126 +97,129 @@ $prefillApiAllowedIps = $db->getSetting('api_allowed_ips');
 <?php } ?>
 
 <div class='contentbox small'>
-	<h2>Automatische Planung</h2>
+	<h2><?php echo LANG['autoplan']; ?></h2>
 	<img class="contentbox-embleme" src="img/flash-auto.svg">
 	<form method="POST">
 		<div>
 			<label>
-				Ruhezeit (Stunden):&nbsp;
+				<?php echo LANG['idle_time_hours']; ?>:&nbsp;
 				<input type="number" name="rest_period" value="<?php echo htmlspecialchars($prefillRestPeriod); ?>">
 				<div class="hint">
-					Verhindert, dass ein Mitarbeiter für einen Frühdienst eingeteilt wird, wenn er am vorhergehenden Tag für einen Spätdienst eingeteilt war.
+					<?php echo LANG['idle_time_hours_description']; ?>
 				</div>
 				<div class="hint">
-					Oftmals sind dies 11 Stunden. Wenn Sie den Wert auf -1 setzen wird die Ruhezeit nicht beachtet.
+					<?php echo LANG['idle_time_hours_description2']; ?>
 				</div>
 			</label>
 		</div>
 
-		<button class="fullwidth margintop"><img src="img/ok.svg">&nbsp;Speichern</button>
+		<button class="fullwidth margintop"><img src="img/ok.svg">&nbsp;<?php echo LANG['save']; ?></button>
 	</form>
 </div>
 
 <div class='contentbox small'>
-	<h2>Self Care Portal</h2>
+	<h2><?php echo LANG['self_care_portal']; ?></h2>
 	<img class="contentbox-embleme" src="img/users.svg">
 	<form method="POST">
 		<div>
 			<label>
 				<input type="hidden" name="sc_absence" value="0">
 				<input type="checkbox" name="sc_absence" value="1" <?php echo $precheckScAbsence ? 'checked="true"' : ''; ?>>
-				"Abwesenheit eintragen" aktivieren
+				<?php echo LANG['enable_enter_absences']; ?>
 			</label>
 		</div>
 		<div>
 			<label>
 				<input type="hidden" name="sc_swap" value="0">
 				<input type="checkbox" name="sc_swap" value="1" <?php echo $precheckScSwap ? 'checked="true"' : ''; ?>>
-				Diensttausch aktivieren
+				<?php echo LANG['enable_service_swap']; ?>
 			</label>
 		</div>
 		<div>
 			<label>
 				<input type="hidden" name="swap_mails" value="0">
 				<input type="checkbox" name="swap_mails" value="1" <?php echo $precheckSwapMails ? 'checked="true"' : ''; ?>>
-				E-Mails bei neuen Tauschgesuchen versenden
+				<?php echo LANG['send_emails_on_new_service_swap']; ?>
 				<div class="hint">
-					Sendet eine E-Mail an alle dem Dienstplan zugewiesenen Mitarbeiter bei einem neuen Tauschgesuch.
+					<?php echo LANG['send_emails_on_new_service_swap_description']; ?>
 				</div>
 			</label>
 		</div>
 
-		<button class="fullwidth margintop"><img src="img/ok.svg">&nbsp;Speichern</button>
+		<button class="fullwidth margintop"><img src="img/ok.svg">&nbsp;<?php echo LANG['save']; ?></button>
 	</form>
 </div>
 
 <div class='contentbox small'>
-	<h2>E-Mail</h2>
+	<h2><?php echo LANG['email']; ?></h2>
 	<img class="contentbox-embleme" src="img/email.svg">
 	<form method="POST">
-		<h3>Domäne (Termineinladungs-Mails)</h3>
-		<input type="text" name="ics_domain" class="fullwidth" placeholder="example.com" value="<?php echo htmlspecialchars($prefillDomain); ?>">
-
-		<button class="fullwidth margintop"><img src="img/ok.svg">&nbsp;Speichern</button>
+		<table>
+			<tr>
+				<th><?php echo LANG['domain_for_invitation_mails']; ?></th>
+				<td><input type="text" name="ics_domain" class="fullwidth" placeholder="example.com" value="<?php echo htmlspecialchars($prefillDomain); ?>"></td>
+			</tr>
+		</table>
+		<button class="fullwidth margintop"><img src="img/ok.svg">&nbsp;<?php echo LANG['save']; ?></button>
 	</form>
 	<p>
-		<a href="?view=editTextTemplates" class="button fullwidth"><img src="img/template.svg">&nbsp;Vorlagen anpassen</a>
+		<a href="?view=editTextTemplates" class="button fullwidth"><img src="img/template.svg">&nbsp;<?php echo LANG['edit_templates']; ?></a>
 	</p>
 </div>
 
 <div class="contentbox small">
-	<h2>API (Schnittstelle)</h2>
+	<h2><?php echo LANG['api']; ?></h2>
 	<img class="contentbox-embleme" src="img/code.svg">
 	<form method="POST">
 		<table>
 			<tr>
-				<th>Status:</th>
+				<th><?php echo LANG['status']; ?>:</th>
 				<td>
 					<label>
 						<input type="hidden" name="api_active" value="0">
-						<input type="checkbox" name="api_active" value="1" <?php echo $precheckApiActive ? 'checked="true"' : ''; ?>>&nbsp;API aktivieren
+						<input type="checkbox" name="api_active" value="1" <?php echo $precheckApiActive ? 'checked="true"' : ''; ?>>&nbsp;<?php echo LANG['enable_api']; ?>
 					</label>
 				</td>
 			</tr>
 			<tr>
-				<th>API-Key:</th>
+				<th><?php echo LANG['api_key']; ?>:</th>
 				<td><input type="text" name="api_key" value="<?php echo htmlspecialchars($prefillApiKey); ?>"></td>
 			</tr>
 			<tr>
-				<th>IP-Freigaben<br>(kommasepariert):</th>
+				<th><?php echo LANG['ip_whitelist']; ?>:</th>
 				<td><input type="text" name="api_allowed_ips" value="<?php echo htmlspecialchars($prefillApiAllowedIps); ?>"></td>
 			</tr>
 			<tr>
 				<th></th>
-				<td><button><img src='img/ok.svg'>&nbsp;Speichern</button></td>
+				<td><button><img src='img/ok.svg'>&nbsp;<?php echo LANG['save']; ?></button></td>
 			</tr>
 		</table>
 	</form>
 </div>
 
 <div class="contentbox small">
-	<h2>Hintergrundbild</h2>
+	<h2><?php echo LANG['background_image']; ?></h2>
 	<img class="contentbox-embleme" src="img/image.svg">
 	<form method="POST" enctype='multipart/form-data'>
 		<table>
 			<tr>
-				<th>Hintergrundbild ändern:</th>
+				<th><?php echo LANG['change']; ?>:</th>
 				<td><input type="file" name="bg_img"></td>
 			</tr>
 			<tr>
 				<th></th>
-				<td><label><input type="checkbox" name="remove_bg_img">&nbsp;Hochgeladenes Bild entfernen</label></td>
+				<td><label><input type="checkbox" name="remove_bg_img">&nbsp;<?php echo LANG['remove_uploaded_image']; ?></label></td>
 			</tr>
 			<tr>
 				<th></th>
-				<td><button><img src='img/ok.svg'>&nbsp;Hochladen</button></td>
+				<td><button><img src='img/ok.svg'>&nbsp;<?php echo LANG['apply']; ?></button></td>
 			</tr>
 		</table>
 	</form>
 </div>
 
 <div class="contentbox small">
-	<h2>Lizenz</h2>
+	<h2><?php echo LANG['license']; ?></h2>
 	<img class="contentbox-embleme" src="img/key.svg">
 	<?php if($lic->licenseValid) { ?>
 		<div class="infobox green"><?php echo $lic->licenseText; ?></div>
@@ -226,58 +229,58 @@ $prefillApiAllowedIps = $db->getSetting('api_allowed_ips');
 	<form method="POST" enctype='multipart/form-data'>
 		<table>
 			<tr>
-				<th>Lizenznehmer:</th>
+				<th><?php echo LANG['licensee']; ?>:</th>
 				<td><input type="text" disabled="true" value="<?php echo htmlspecialchars($lic->licenseCompany); ?>"></td>
 			</tr>
 			<tr>
-				<th>Gültig bis:</th>
+				<th><?php echo LANG['valid_to']; ?>:</th>
 				<td><input type="text" disabled="true" value="<?php echo htmlspecialchars(strftime(DATE_FORMAT, $lic->licenseExpireTime)); ?>"></td>
 			</tr>
 			<tr>
-				<th>Lizenzierte Benutzer:</th>
+				<th><?php echo LANG['licensed_users']; ?>:</th>
 				<td><input type="number" disabled="true" value="<?php echo htmlspecialchars($lic->licenseUsers); ?>"></td>
 			</tr>
 			<tr>
-				<th>Lizenzdatei einspielen:</th>
+				<th><?php echo LANG['import_license']; ?>:</th>
 				<td><input type="file" name="license_file"></td>
 			</tr>
 			<tr>
-				<td><a href="https://georg-sieber.de/?page=masterplan" target="_blank">Lizenzen kaufen</a></td>
-				<td><button><img src='img/ok.svg'>&nbsp;Hochladen</button></td>
+				<td><a href="https://georg-sieber.de/?page=masterplan" target="_blank"><?php echo LANG['buy_license']; ?></a></td>
+				<td><button><img src='img/ok.svg'>&nbsp;<?php echo LANG['upload']; ?></button></td>
 			</tr>
 		</table>
 	</form>
 </div>
 
 <div class="contentbox small">
-	<h2>Abwesenheiten (Urlaub)</h2>
+	<h2><?php echo LANG['absences']; ?></h2>
 	<img class="contentbox-embleme" src="img/absent.svg">
 	<p>
 		<form method="POST">
 			<div class="margintop">
 				<label>
 					<input type="radio" name="absence_confirmation_required" value="0" <?php echo ($precheckAbsenceConfirmationRequired==0) ? 'checked="true"' : ''; ?>>
-					Keine Bestätigung/Genehmigung notwendig
+					<?php echo LANG['no_confirmation_approval']; ?>
 					<div class="hint">
-						Abwesenheiten sind sofort freigegeben und werden bei der Planung beachtet
+						<?php echo LANG['no_confirmation_approval_description']; ?>
 					</div>
 				</label>
 			</div>
 			<div class="margintop">
 				<label>
 					<input type="radio" name="absence_confirmation_required" value="1" <?php echo ($precheckAbsenceConfirmationRequired==1) ? 'checked="true"' : ''; ?>>
-					Bestätigung durch Dienstplan-Admin
+					<?php echo LANG['approval_by_roster_admin']; ?>
 					<div class="hint">
-						Abwesenheiten benötigen Bestätigung durch einen zugehörigen Dienstplan-Admin
+						<?php echo LANG['approval_by_roster_admin_description']; ?>
 					</div>
 				</label>
 			</div>
 			<div class="margintop">
 				<label>
 					<input type="radio" name="absence_confirmation_required" value="2" <?php echo ($precheckAbsenceConfirmationRequired==2) ? 'checked="true"' : ''; ?>>
-					Bestätigung durch Dienstplan-Admin und Genehmigung durch Superadmin
+					<?php echo LANG['approval_by_roster_admin_and_confirmation_by_superadmin']; ?>
 					<div class="hint">
-						Abwesenheiten benötigen Bestätigung durch einen zugehörigen Dienstplan-Admin sowie eine Genehmigung durch einen Superadmin
+						<?php echo LANG['approval_by_roster_admin_and_confirmation_by_superadmin_description']; ?>
 					</div>
 				</label>
 			</div>
@@ -286,16 +289,16 @@ $prefillApiAllowedIps = $db->getSetting('api_allowed_ips');
 				<label>
 					<input type="hidden" name="absence_mails" value="0">
 					<input type="checkbox" name="absence_mails" value="1" <?php echo $precheckAbsenceMails ? 'checked="true"' : ''; ?>>
-					Automatisch E-Mails versenden
+					<?php echo LANG['automatically_send_emails']; ?>
 					<div class="hint">
-						An Dienstplan-Admins bei neu zu bestätigenden Abwesenheiten sowie an den beantragenden Mitarbeiter nach Genehmigung
+						<?php echo LANG['absences_automatically_send_emails_description']; ?>
 					</div>
 				</label>
 			</div>
-			<button class="fullwidth margintop"><img src="img/ok.svg">&nbsp;Speichern</button>
+			<button class="fullwidth margintop"><img src="img/ok.svg">&nbsp;<?php echo LANG['save']; ?></button>
 		</form>
 	</p>
 	<p>
-		<a href="?view=editAbsentTypes" class="button fullwidth"><img src="img/absent.svg">&nbsp;Abwesenheitstypen definieren</a>
+		<a href="?view=editAbsentTypes" class="button fullwidth"><img src="img/absent.svg">&nbsp;<?php echo LANG['define_absence_types']; ?></a>
 	</p>
 </div>

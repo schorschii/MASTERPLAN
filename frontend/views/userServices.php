@@ -23,7 +23,7 @@ if(isset($_GET['roster'])) {
 			$roster = -1;
 			$preselectRoster = -1;
 		} else {
-			$info = 'Sie benötigen Superadmin-Rechte um den Einsatzplan aller Mitarbeiter einzusehen';
+			$info = LANG['page_superadmin_right_needed'];
 			$infoclass = 'yellow';
 		}
 	} else {
@@ -33,7 +33,7 @@ if(isset($_GET['roster'])) {
 			if($roster != null) // null means all employees
 				$preselectRoster = $roster->id;
 		} else {
-			$info = 'Sie besitzen keine Admin-Rechte für den angeforderten Dienstplan';
+			$info = LANG['no_admin_rights_for_this_roster'];
 			$infoclass = 'yellow';
 		}
 	}
@@ -56,10 +56,10 @@ function echoUserServices($user_id, $day) {
 <div class="contentbox">
 	<form method="GET">
 		<div class="inlineblock">
-			Zeige Mitarbeiter aus Dienstplan:
+			<?php echo LANG['show_employees_of_roster']; ?>:
 			<select name="roster" autofocus="true">
 				<?php if($currentUser->superadmin > 0) { ?>
-					<option value='-1'>ALLE MITARBEITER</option>
+					<option value='-1'><?php echo LANG['all_employees']; ?></option>
 				<?php } ?>
 				<?php foreach($db->getRosters() as $r) {
 					if(!$perm->isUserAdminForRoster($currentUser, $r->id)) continue;
@@ -69,30 +69,30 @@ function echoUserServices($user_id, $day) {
 		</div>
 		<div class="inlineblock">
 			<input type="hidden" name="view" value="userServices">
-			Woche:
+			<?php echo LANG['week']; ?>:
 			<input type="week" name="week" value="<?php echo htmlspecialchars($preselectWeek); ?>">
-			<button><img src="img/refresh.svg">&nbsp;Anzeigen</button>
+			<button><img src="img/refresh.svg">&nbsp;<?php echo LANG['show']; ?></button>
 		</div>
 	</form>
 	<?php if($roster === null) { ?>
 		<?php if($info != null) { ?>
 			<div class="infobox margintop <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
 		<?php } else { ?>
-			<div class="infobox gray margintop">Bitte wählen Sie einen Einsatzplan aus</div>
+			<div class="infobox gray margintop"><?php echo LANG['please_select_deployment_plan']; ?></div>
 		<?php } ?>
 	<?php } ?>
 </div>
 
 <?php if($roster !== null) { ?>
 <div class="contentbox">
-	<h2><?php echo ($roster !== -1) ? 'Mitarbeiter '.htmlspecialchars($roster->title) : 'Alle Mitarbeiter'; ?>, <?php echo htmlspecialchars($strWeek); ?></h2>
+	<h2><?php echo ($roster !== -1) ? LANG['employee'].' '.htmlspecialchars($roster->title) : LANG['all_employees']; ?>, <?php echo htmlspecialchars($strWeek); ?></h2>
 	<div class="toolbar marginbottom">
 		<form method="GET" class="inlineblock" action="export.php" target="_blank">
 			<input type="hidden" name="export" value="userServices">
 			<input type="hidden" name="type" value="pdf">
 			<input type="hidden" name="roster" value="<?php echo $preselectRoster; ?>">
 			<input type="hidden" name="week" value="<?php echo $strWeek; ?>">
-			<button><img id="btnSendMailsImg" src="img/export.svg">&nbsp;PDF-Export</button>
+			<button><img id="btnSendMailsImg" src="img/export.svg">&nbsp;<?php echo LANG['pdf_export']; ?></button>
 		</form>
 	</div>
 	<?php if($info != null) { ?>
@@ -173,7 +173,7 @@ function echoUserServices($user_id, $day) {
 					<div class="hint2">
 						<?php
 						$servicesPercent = @round($week['services']*100/$u->max_services_per_week);
-						echo '<b>'.$week['services'].'/'.$u->max_services_per_week.'</b> Dienste/Woche ('.$servicesPercent.'%)';
+						echo '<b>'.$week['services'].'/'.$u->max_services_per_week.'</b> '.LANG['services_per_week'].' ('.$servicesPercent.'%)';
 						?>
 					</div>
 					<?php } ?>
@@ -181,7 +181,7 @@ function echoUserServices($user_id, $day) {
 					<div class="hint2">
 						<?php
 						$weekHoursPercent = @round($week['hours']*100/$u->max_hours_per_week);
-						echo '<b>'.$week['hours'].'/'.$u->max_hours_per_week.'</b> Std./Woche ('.$weekHoursPercent.'%)';
+						echo '<b>'.$week['hours'].'/'.$u->max_hours_per_week.'</b> '.LANG['hrs_per_week'].' ('.$weekHoursPercent.'%)';
 						?>
 					</div>
 					<?php } ?>
@@ -189,7 +189,7 @@ function echoUserServices($user_id, $day) {
 					<div class="hint2">
 						<?php
 						$monthHoursPercent = @round($month['hours']*100/$u->max_hours_per_month);
-						echo '<b>'.$month['hours'].'/'.$u->max_hours_per_month.'</b> Std. '.strftime('%b',$timeWd1).' ('.$monthHoursPercent.'%)';
+						echo '<b>'.$month['hours'].'/'.$u->max_hours_per_month.'</b> '.LANG['hrs'].' '.strftime('%b',$timeWd1).' ('.$monthHoursPercent.'%)';
 						?>
 					</div>
 					<?php } ?>

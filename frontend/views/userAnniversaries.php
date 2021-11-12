@@ -5,7 +5,7 @@ $infoclass = null;
 // rights check
 if(!isset($currentUser)) die();
 if($currentUser->superadmin == 0) {
-	die('<div class="infobox red">Sie benötigen Superadmin-Berechtigungen um diese Seite aufzurufen</div>');
+	die('<div class="infobox red">'.LANG['page_superadmin_right_needed'].'</div>');
 }
 
 $users = [];
@@ -36,11 +36,11 @@ function sortAnniversaries($a, $b) {
 ?>
 
 <div class='contentbox small'>
-	<h2>Kommende Jubiläen</h2>
+	<h2><?php echo LANG['upcoming_anniversaries']; ?></h2>
 
 	<table class="data">
 		<tr>
-			<th>Mitarbeiter</th><th>E-Mail</th><th>Arbeitsbeginn</th><th>Mitarbeiter seit</th>
+			<th><?php echo LANG['employee']; ?></th><th><?php echo LANG['email']; ?></th><th><?php echo LANG['work_begin']; ?></th><th><?php echo LANG['employee_since']; ?></th>
 		</tr>
 		<?php
 		foreach($users as $u) {

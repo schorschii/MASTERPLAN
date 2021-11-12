@@ -53,19 +53,19 @@ if(isset($_POST['action'])) {
 		}
 
 		if(!$error) {
-			$info = 'Dienst wurde getauscht. Vielen Dank!';
+			$info = LANG['service_swapped'];
 			$infoclass = 'green';
 		} else {
-			$info = 'Dienst konnte nicht getauscht werden: '.$db->getLastStatement()->error;
+			$info = LANG['error'].': '.$db->getLastStatement()->error;
 			$infoclass = 'red';
 		}
 	}
 	elseif($_POST['action'] == 'take_vacant_service') {
 		if($db->updatePlannedService(null, $_POST['day'], $_POST['service'], $currentUser->id)) {
-			$info = 'Dienst wurde übernommen. Vielen Dank!';
+			$info = LANG['service_taken'];
 			$infoclass = 'green';
 		} else {
-			$info = 'Dienst konnte nicht übernommen werden: '.$db->getLastStatement()->error;
+			$info = LANG['error'].': '.$db->getLastStatement()->error;
 			$infoclass = 'red';
 		}
 	}
@@ -78,7 +78,7 @@ if(isset($_POST['action'])) {
 
 <?php if(boolval($db->getSetting('sc_swap'))) { ?>
 <div class="contentbox">
-	<h2>Tauschgesuche</h2>
+	<h2><?php echo LANG['service_swap_requests']; ?></h2>
 	<?php
 		$allSwapServices = $db->getSwapServices();
 		$swapServices = [];
@@ -93,15 +93,15 @@ if(isset($_POST['action'])) {
 		}
 		if(count($swapServices) == 0) {
 	?>
-		<div class="infobox">Im Moment sind keine Dienste innerhalb der Ihnen zugeteilten Dienstpläne zum Tausch freigegeben</div>
+		<div class="infobox"><?php echo LANG['no_swap_services_found']; ?></div>
 	<?php } else { ?>
 		<table class="data plan nocolumnlines">
 			<tr>
-				<th>Mitarbeiter</th>
-				<th>Tag</th>
-				<th>Dienst</th>
-				<th>Kommentar</th>
-				<th>Aktion</th>
+				<th><?php echo LANG['employee']; ?></th>
+				<th><?php echo LANG['day']; ?></th>
+				<th><?php echo LANG['service']; ?></th>
+				<th><?php echo LANG['comment']; ?></th>
+				<th><?php echo LANG['action']; ?></th>
 			</tr>
 			<?php foreach($swapServices as $ss) { ?>
 				<tr>
@@ -121,10 +121,10 @@ if(isset($_POST['action'])) {
 						<?php echo htmlspecialchars(tools::shortText($ss->comment)); ?>
 					</td>
 					<td>
-						<form method="POST" onsubmit="return confirm('Möchten Sie diesen Dienst übernehmen?')">
+						<form method="POST" onsubmit="return confirm('<?php echo LANG['confirm_take_service']; ?>')">
 							<input type="hidden" name="action" value="swap_service">
 							<input type="hidden" name="id" value="<?php echo $ss->id; ?>">
-							<button><img src="img/ok.svg">&nbsp;Dienst übernehmen</button>
+							<button><img src="img/ok.svg">&nbsp;<?php echo LANG['take_service']; ?></button>
 						</form>
 					</td>
 				</tr>
@@ -154,15 +154,15 @@ foreach($db->getUserRosters($_SESSION['mp_userid']) as $ur) {
 }
 ?>
 <div class="contentbox">
-	<h2>Vakante Dienste</h2>
+	<h2><?php echo LANG['vacant_services']; ?></h2>
 	<?php if(count($vacantServices) == 0) { ?>
-		<div class="infobox">Im Moment sind keine Dienste innerhalb der Ihnen zugeteilten Dienstpläne unbesetzt</div>
+		<div class="infobox"><?php echo LANG['no_vacant_services_found']; ?></div>
 	<?php } else { ?>
 	<table class="data plan nocolumnlines">
 		<tr>
-			<th>Tag</th>
-			<th>Dienst</th>
-			<th>Aktion</th>
+			<th><?php echo LANG['day']; ?></th>
+			<th><?php echo LANG['service']; ?></th>
+			<th><?php echo LANG['action']; ?></th>
 		</tr>
 		<?php
 		$lastTitle = null;
@@ -176,11 +176,11 @@ foreach($db->getUserRosters($_SESSION['mp_userid']) as $ur) {
 			<td><?php echo strftime('%a', $vs['time']).', '.strftime(DATE_FORMAT, $vs['time']); ?></td>
 			<td><?php boxes::echoService($db->getService($vs['service_id']), $vs['day'], $db); ?></td>
 			<td>
-				<form method="POST" onsubmit="return confirm('Möchten Sie diesen Dienst übernehmen?')">
+				<form method="POST" onsubmit="return confirm('<?php echo LANG['confirm_take_service']; ?>')">
 					<input type="hidden" name="action" value="take_vacant_service">
 					<input type="hidden" name="service" value="<?php echo $vs['service_id']; ?>">
 					<input type="hidden" name="day" value="<?php echo $vs['day']; ?>">
-					<button><img src="img/ok.svg">&nbsp;Dienst übernehmen</button>
+					<button><img src="img/ok.svg">&nbsp;<?php echo LANG['take_service']; ?></button>
 				</form>
 			</td>
 		</tr>

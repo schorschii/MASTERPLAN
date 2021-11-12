@@ -5,7 +5,7 @@ $infoclass = null;
 // rights check
 if(!isset($currentUser)) die();
 if($currentUser->superadmin == 0) {
-	die('<div class="infobox red">Sie benötigen Superadmin-Berechtigungen um diese Seite aufzurufen</div>');
+	die('<div class="infobox red">'.LANG['page_superadmin_right_needed'].'</div>');
 }
 
 // create/update
@@ -23,11 +23,11 @@ if(!empty($_POST['title'])) {
 			header('Location: index.php?view=holidays');
 			die();
 		} else {
-			$info = "Schließtag gespeichert";
+			$info = LANG['holiday_saved'];
 			$infoclass = "green";
 		}
 	} else {
-		$info = "Schließtag konnte nicht gespeichert werden: ".$db->getLastStatement()->error;
+		$info = LANG['error'].': '.$db->getLastStatement()->error;
 		$infoclass = "red";
 	}
 }
@@ -41,7 +41,7 @@ $prefillService = -1;
 $h = null;
 if(isset($_GET['id'])) {
 	$h = $db->getHoliday($_GET['id']);
-	if($h == null) die('<div class="infobox red">Schließtag nicht gefunden</div>');
+	if($h == null) die('<div class="infobox red">'.LANG['not_found'].'</div>');
 	$prefillTitle = $h->title;
 	$prefillDay = $h->day;
 	$prefillService = $h->service_id;
@@ -50,9 +50,9 @@ if(isset($_GET['id'])) {
 
 <div class='contentbox small'>
 	<?php if($h == null) { ?>
-		<h2>Neuer Schließtag</h2>
+		<h2><?php echo LANG['new_holiday']; ?></h2>
 	<?php } else { ?>
-		<h2>Schließtag bearbeiten</h2>
+		<h2><?php echo LANG['edit_holiday']; ?></h2>
 	<?php } ?>
 	<?php if($info != null) { ?>
 		<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
@@ -65,18 +65,18 @@ if(isset($_GET['id'])) {
 
 		<table>
 			<tr>
-				<th>Bezeichnung:</th>
+				<th><?php echo LANG['description']; ?>:</th>
 				<td><input type="text" name="title" autofocus="true" value="<?php echo htmlspecialchars($prefillTitle); ?>"></td>
 			</tr>
 			<tr>
-				<th>Tag:</th>
+				<th><?php echo LANG['day']; ?>:</th>
 				<td><input type="date" name="day" value="<?php echo htmlspecialchars($prefillDay); ?>"></td>
 			</tr>
 			<tr>
-				<th>Dienst(e):</th>
+				<th><?php echo LANG['services']; ?>:</th>
 				<td>
 					<select name="service">
-						<option value=''>ALLE</option>
+						<option value=''><?php echo LANG['all']; ?></option>
 						<?php
 						foreach($db->getRosters() as $r) {
 							echo "<optgroup label='".htmlspecialchars($r->title)."'>";
@@ -94,11 +94,11 @@ if(isset($_GET['id'])) {
 			</tr>
 			<tr>
 				<th></th>
-				<td><button><img src='img/ok.svg'>&nbsp;Speichern</button></td>
+				<td><button><img src='img/ok.svg'>&nbsp;<?php echo LANG['save']; ?></button></td>
 			</tr>
 		</table>
 	</form>
 	<p>
-		<a href="?view=holidays" class="button fullwidth"><img src='img/holiday.svg'>&nbsp;Eingetragene Schließtage anzeigen</a>
+		<a href="?view=holidays" class="button fullwidth"><img src='img/holiday.svg'>&nbsp;<?php echo LANG['show_existing_holidays']; ?></a>
 	</p>
 </div>

@@ -5,7 +5,7 @@ $infoclass = null;
 // rights check
 if(!isset($currentUser)) die();
 if($currentUser->superadmin == 0) {
-	die('<div class="infobox red">Sie benötigen Superadmin-Berechtigungen um diese Seite aufzurufen</div>');
+	die('<div class="infobox red">'.LANG['page_superadmin_right_needed'].'</div>');
 }
 
 if(!empty($_POST['action']) && $_POST['action']=='template') {
@@ -28,22 +28,22 @@ if(!empty($_POST['action']) && $_POST['action']=='template') {
 	$db->updateSetting('default_user_max_hours_per_month', $_POST['max_hours_per_month']);
 	$db->updateSetting('default_user_locked', $_POST['locked']);
 	$db->updateSetting('default_user_superadmin', $_POST['superadmin']);
-	$info = "Als Standard für neue Benutzer gespeichert";
-	$infoclass = "green";
+	$info = LANG['saved_as_default_for_new_users'];
+	$infoclass = 'green';
 }
 elseif(!empty($_POST['login'])) {
 	// create/update user
 	if(empty($_POST['id']) && $db->getUserByLogin($_POST['login'])) {
-		$info = "Ein Benutzer mit dem Anmeldenamen '".$_POST['login']."' existiert bereits";
+		$info = str_replace('%1', $_POST['login'], LANG['user_already_exists']);
 		$infoclass = "red";
 	} elseif(isset($_POST['id']) && $_POST['id'] == $_SESSION['mp_userid'] && $_POST['superadmin'] != 1) {
-		$info = "Sie können sich nicht selbst die Superadmin-Berechtigung entziehen - dies muss durch einen anderen Superadmin erfolgen.";
+		$info = LANG['you_cannot_revoke_superadmin_rights_yourself'];
 		$infoclass = "red";
 	} elseif(isset($_POST['id']) && $_POST['id'] == $_SESSION['mp_userid'] && $_POST['locked'] > 0) {
-		$info = "Sie können sich nicht selbst sperren - dies muss durch einen anderen Superadmin erfolgen.";
+		$info = LANG['you_cannot_lock_yourself'];
 		$infoclass = "red";
 	} elseif(trim($_POST['fullname']) === "") {
-		$info = "Der Anzeigename darf nicht leer sein";
+		$info = LANG['display_name_cannot_be_empty'];
 		$infoclass = "red";
 	} else {
 		$error = false;
@@ -127,15 +127,15 @@ elseif(!empty($_POST['login'])) {
 		}
 
 		if($error) {
-			$info = "Benutzer konnte nicht gespeichert werden: ".$db->getLastStatement()->error;
-			$infoclass = "red";
+			$info = LANG['error'].': '.$db->getLastStatement()->error;
+			$infoclass = 'red';
 		} else {
 			if(isset($_POST['id'])) {
 				header('Location: index.php?view=users');
 				die();
 			} else {
-				$info = "Benutzer gespeichert";
-				$infoclass = "green";
+				$info = LANG['user_saved'];
+				$infoclass = 'green';
 			}
 		}
 	}
@@ -169,7 +169,7 @@ $userRole = null;
 $u = null;
 if(isset($_GET['id'])) {
 	$u = $db->getUser($_GET['id']);
-	if($u == null) die('<div class="infobox red">Benutzer nicht gefunden</div>');
+	if($u == null) die('<div class="infobox red">'.LANG['not_found'].'</div>');
 	$prefillLogin = $u->login;
 	$prefillFirstName = $u->firstname;
 	$prefillLastName = $u->lastname;
@@ -213,9 +213,9 @@ function selectIfInRoster($roster, $user_rosters) {
 	}
 </script>
 <div class='contentbox small'>
-	<h2>Benutzereinstellungen</h2>
+	<h2><?php echo LANG['user_settings']; ?></h2>
 	<?php if($prefillLdap) { ?>
-		<div class="infobox gray">Sie bearbeiten einen LDAP-Account. Einige Felder können nur über Ihren Verzeichnisdienst geändert werden.</div>
+		<div class="infobox gray"><?php echo LANG['ldap_account_notes']; ?></div>
 	<?php } ?>
 	<?php if($info != null) { ?>
 		<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
@@ -229,67 +229,67 @@ function selectIfInRoster($roster, $user_rosters) {
 		<input type="hidden" name="action" id="action" value="update">
 		<table class="input">
 			<tr>
-				<th>Anmeldename:</th>
+				<th><?php echo LANG['login_name']; ?>:</th>
 				<td><input type="text" name="login" autofocus="true" value="<?php echo htmlspecialchars($prefillLogin); ?>" <?php echo $prefillLdap ? "readonly='true'" : ""; ?>></td>
 			</tr>
 			<tr>
-				<th>Vorname:</th>
+				<th><?php echo LANG['first_name']; ?>:</th>
 				<td><input type="text" id="txtFirstName" oninput="fillFullName()" name="firstname" value="<?php echo htmlspecialchars($prefillFirstName); ?>" <?php echo $prefillLdap ? "readonly='true'" : ""; ?>></td>
 			</tr>
 			<tr>
-				<th>Nachname:</th>
+				<th><?php echo LANG['surname']; ?>:</th>
 				<td><input type="text" id="txtLastName" oninput="fillFullName()" name="lastname" value="<?php echo htmlspecialchars($prefillLastName); ?>" <?php echo $prefillLdap ? "readonly='true'" : ""; ?>></td>
 			</tr>
 			<tr>
-				<th>Anzeigename:</th>
+				<th><?php echo LANG['display_name']; ?>:</th>
 				<td><input type="text" id="txtFullName" name="fullname" value="<?php echo htmlspecialchars($prefillFullName); ?>" <?php echo $prefillLdap ? "readonly='true'" : ""; ?>></td>
 			</tr>
 			<tr>
-				<th>E-Mail Adresse:</th>
+				<th><?php echo LANG['email_address']; ?>:</th>
 				<td><input type="email" name="email" value="<?php echo htmlspecialchars($prefillEmail); ?>" <?php echo $prefillLdap ? "readonly='true'" : ""; ?>></td>
 			</tr>
 			<tr>
-				<th>Telefon:</th>
+				<th><?php echo LANG['phone']; ?>:</th>
 				<td><input type="text" name="phone" value="<?php echo htmlspecialchars($prefillPhone); ?>" <?php echo $prefillLdap ? "readonly='true'" : ""; ?>></td>
 			</tr>
 			<tr>
-				<th>Mobiltelefon:</th>
+				<th><?php echo LANG['mobile']; ?>:</th>
 				<td><input type="text" name="mobile" value="<?php echo htmlspecialchars($prefillMobile); ?>" <?php echo $prefillLdap ? "readonly='true'" : ""; ?>></td>
 			</tr>
 			<tr>
-				<th>Geburtstag:</th>
+				<th><?php echo LANG['birthday']; ?>:</th>
 				<td><input type="date" name="birthday" value="<?php echo htmlspecialchars($prefillBirthday); ?>"></td>
 			</tr>
 			<tr>
-				<th>Arbeitsbeginn:</th>
+				<th><?php echo LANG['work_begin']; ?>:</th>
 				<td><input type="date" name="start_date" value="<?php echo htmlspecialchars($prefillStartDate); ?>"></td>
 			</tr>
 			<tr>
-				<th>Identifikationsnummer:</th>
+				<th><?php echo LANG['identification_number']; ?>:</th>
 				<td><input type="text" name="id_no" value="<?php echo htmlspecialchars($prefillIdNo); ?>"></td>
 			</tr>
 			<tr>
-				<th>Beschreibung:</th>
+				<th><?php echo LANG['description']; ?>:</th>
 				<td><input type="text" name="description" value="<?php echo htmlspecialchars($prefillDescription); ?>" <?php echo $prefillLdap ? "readonly='true'" : ""; ?>></td>
 			</tr>
 			<tr>
-				<th>Kennwort:</th>
+				<th><?php echo LANG['password']; ?>:</th>
 				<td><input type="password" name="password" value="<?php echo htmlspecialchars($prefillPassword); ?>" <?php echo $prefillLdap ? "readonly='true'" : ""; ?>></td>
 			</tr>
 			<tr>
-				<th>Max. Std./Tag:</th>
+				<th><?php echo LANG['max_hrs_day']; ?>:</th>
 				<td><input type="number" name="max_hours_per_day" <?php if($userRole!=null) echo 'readonly="true"'; ?> value="<?php echo $prefillMaxHoursPerDay; ?>"></td>
 			</tr>
 			<tr>
-				<th>Max. Dienste/Woche:</th>
+				<th><?php echo LANG['max_services_week']; ?>:</th>
 				<td><input type="number" name="max_services_per_week" <?php if($userRole!=null) echo 'readonly="true"'; ?> value="<?php echo $prefillMaxServicesPerWeek; ?>"></td>
 			</tr>
 			<tr>
-				<th>Max. Std./Woche:</th>
+				<th><?php echo LANG['max_hrs_week']; ?>:</th>
 				<td><input type="number" name="max_hours_per_week" <?php if($userRole!=null) echo 'readonly="true"'; ?> value="<?php echo $prefillMaxHoursPerWeek; ?>"></td>
 			</tr>
 			<tr>
-				<th>Max. Std./Monat:</th>
+				<th><?php echo LANG['max_hrs_month']; ?>:</th>
 				<td><input type="number" name="max_hours_per_month" <?php if($userRole!=null) echo 'readonly="true"'; ?> value="<?php echo $prefillMaxHoursPerMonth; ?>"></td>
 			</tr>
 			<?php if($userRole != null) { ?>
@@ -300,15 +300,15 @@ function selectIfInRoster($roster, $user_rosters) {
 				</tr>
 			<?php } ?>
 			<tr>
-				<th>Farbe:</th>
+				<th><?php echo LANG['color']; ?>:</th>
 				<td><input type="color" name="color" value="<?php echo htmlspecialchars($prefillColor); ?>"></td>
 			</tr>
 			<tr>
 				<th>
-					Zugeteilte Dienstpläne:
+					<?php echo LANG['assigned_rosters']; ?>:
 					<div class="hint">
-						<div>Wählen Sie die Dienstpläne aus, in denen diese Person eingesetzt werden soll.</div>
-						<div>Halten Sie STRG gedrückt, um mehrere Dienstpläne auszuwählen.</div>
+						<div><?php echo LANG['assigned_rosters_description']; ?></div>
+						<div><?php echo LANG['assigned_rosters_description2']; ?></div>
 					</div>
 				</th>
 				<td>
@@ -321,9 +321,9 @@ function selectIfInRoster($roster, $user_rosters) {
 			</tr>
 			<tr>
 				<th>
-					Dienstplanadmin für:
+					<?php echo LANG['roster_admin_for']; ?>:
 					<div class="hint">
-						Dienstplanadmins dürfen Dienste für die angegebenen Dienstpläne planen.
+						<?php echo LANG['roster_admin_description']; ?>
 					</div>
 				</th>
 				<td>
@@ -335,38 +335,38 @@ function selectIfInRoster($roster, $user_rosters) {
 				</td>
 			</tr>
 			<tr>
-				<th>Account-Sperre:</th>
+				<th><?php echo LANG['account_lock']; ?>:</th>
 				<td class="padding">
 					<label>
 						<input type="hidden" name="locked" value="0">
 						<input type="checkbox" name="locked" value="1" <?php if($precheckLocked) echo 'checked="true"'; ?>>
-						Benutzerkonto sperren
+						<?php echo LANG['lock_account']; ?>
 						<div class="hint">
-							Gesperrte Benutzer können sich nicht mehr anmelden, jedoch weiterhin Diensten zugeordnet werden.
+							<?php echo LANG['lock_account_description']; ?>
 						</div>
 					</label>
 				</td>
 			</tr>
 			<tr>
-				<th>Superadmin-Berechtigung:</th>
+				<th><?php echo LANG['superadmin_right']; ?>:</th>
 				<td class="padding">
 					<label>
 						<input type="hidden" name="superadmin" value="0">
 						<input type="checkbox" name="superadmin" value="1" <?php if($precheckSuperadmin) echo 'checked="true"'; ?>>
-						MASTERPLAN-Superadmin
+						<?php echo LANG['masterplan_superadmin']; ?>
 						<div class="hint">
-							Superadmins dürfen alle Dienstpläne, Dienste, Benutzer und globale Einstellungen verwalten.
+							<?php echo LANG['superadmin_description']; ?>
 						</div>
 					</label>
 				</td>
 			</tr>
 			<tr>
 				<th></th>
-				<td><button class="fullwidth"><img src='img/ok.svg'>&nbsp;Benutzer speichern</button></td>
+				<td><button class="fullwidth"><img src='img/ok.svg'>&nbsp;<?php echo LANG['save']; ?></button></td>
 			</tr>
 			<tr>
 				<th></th>
-				<td><button class="fullwidth" onclick="action.value = 'template'"><img src='img/template.svg'>&nbsp;Als Standard festlegen</button></td>
+				<td><button class="fullwidth" onclick="action.value = 'template'"><img src='img/template.svg'>&nbsp;<?php echo LANG['set_as_default']; ?></button></td>
 			</tr>
 		</table>
 	</form>
@@ -374,7 +374,7 @@ function selectIfInRoster($roster, $user_rosters) {
 		<br>
 		<form method='POST' action='index.php?view=editUserConstraint'>
 			<input type='hidden' name='user' value='<?php echo $u->id; ?>'>
-			<button class='fullwidth'><img src='img/warning.svg'>&nbsp;Beschränkungen bearbeiten</button>
+			<button class='fullwidth'><img src='img/warning.svg'>&nbsp;<?php echo LANG['edit_constraints']; ?></button>
 		</form>
 	<?php } ?>
 </div>

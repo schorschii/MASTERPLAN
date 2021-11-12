@@ -5,7 +5,7 @@ $infoclass = null;
 // rights check
 if(!isset($currentUser)) die();
 if($currentUser->superadmin == 0) {
-	die('<div class="infobox red">Sie benötigen Superadmin-Berechtigungen um diese Seite aufzurufen</div>');
+	die('<div class="infobox red">'.LANG['page_superadmin_right_needed'].'</div>');
 }
 
 // cleanup selected items
@@ -24,52 +24,52 @@ if(isset($_POST['date'])) {
 		$success = $db->removeExpiredServices();
 	}
 	if($success === true) {
-		$info = 'Datenbank wurde bereinigt';
+		$info = LANG['database_cleaned'];
 		$infoclass = 'green';
 	} elseif($success === null) {
-		$info = 'Es wurde keine Aktion ausgewählt';
+		$info = LANG['no_action_selected'];
 		$infoclass = 'yellow';
 	} else {
-		$info = 'Fehler bei der Datenbank-Bereinigung: '.$db->getLastStatement()->error;
+		$info = LANG['error'].': '.$db->getLastStatement()->error;
 		$infoclass = 'red';
 	}
 }
 ?>
 <div class="contentbox small">
-	<h2>Datenbank-Bereinigung</h2>
+	<h2><?php echo LANG['database_cleanup']; ?></h2>
 	<?php if($info != null) { ?>
 		<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
 	<?php } ?>
 	<div class="infobox gray">
-		Mit diesem Tool können Sie nicht mehr benötigte Datensätze aus der Datenbank entfernen um Speicherplatz zu sparen und die Performance zu verbessern.
+		<?php echo LANG['database_cleanup_description']; ?>
 	</div>
 	<form method="POST" onsubmit="return confirm('Möchten Sie die ausgewählten Aktionen jetzt ausführen?')">
 		<label>
-			Lösche Daten ab einschließlich:
+			<?php echo LANG['clear_data_including']; ?>:
 			<input type="date" name="date">
 		</label>
 		<br><br>
 		<label>
 			<input type="checkbox" name="clear_old_assignments" value="1">
-			Benutzer-Dienstzuweisungen, älter als oben angegeben, löschen
+			<?php echo LANG['clear_user_service_assignments']; ?>
 		</label>
 		<br>
 		<label>
 			<input type="checkbox" name="clear_old_absences" value="1">
-			Eingetragene Abwesenheiten, älter als oben angegeben, löschen
+			<?php echo LANG['clear_absences']; ?>
 		</label>
 		<br>
 		<label>
 			<input type="checkbox" name="clear_old_swaps" value="1">
-			Tauschgesuche, älter als oben angegeben, löschen
+			<?php echo LANG['clear_swap_requests']; ?>
 		</label>
 		<br>
 		<label>
 			<input type="checkbox" name="clear_old_services" value="1">
-			Abgelaufene Dienste löschen
+			<?php echo LANG['clear_expired_services']; ?>
 		</label>
 		<div class="margintop">
-			<button class="fullwidth"><img src="img/ok.svg">&nbsp;Start</button>
+			<button class="fullwidth"><img src="img/ok.svg">&nbsp;<?php echo LANG['start']; ?></button>
 		</div>
 	</form>
 </div>

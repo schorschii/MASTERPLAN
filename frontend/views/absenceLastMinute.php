@@ -36,25 +36,25 @@ if(isset($_POST['action'])) {
 						}
 
 						if($error) {
-							$info = 'Abwesenheit wurde eingetragen. Dienste konnten nicht vollständig als vakant markiert werden.';
+							$info = LANG['absence_saved_services_could_not_be_marked_as_vacant'];
 							$infoclass = 'red';
 						} else {
-							$info = 'Abwesenheit wurde eingetragen. '.$hasServices.' Dienst(e) wurden dadurch vakant.';
+							$info = str_replace('%1', $hasServices, LANG['absence_saved_services_are_now_vacant']);
 							$infoclass = 'green';
 						}
 
 					} else {
-						$info = 'Abwesenheit konnte nicht eingetragen werden: '.$db->getLastStatement()->error;
+						$info = LANG['absence_could_not_be_saved'].' '.$db->getLastStatement()->error;
 						$infoclass = 'red';
 					}
 
 				} else {
-					$info = 'Der angegebene Zeitraum ist zu groß (max. 60 Tage). Bitte teilen Sie die Abwesenheiten ggf. in mehrere Teile auf.';
+					$info = LANG['absence_too_long'];
 					$infoclass = 'red';
 				}
 
 			} else {
-				$info = 'Enddatum liegt vor dem Startdatum!';
+				$info = LANG['end_date_before_start_date'];
 				$infoclass = 'red';
 			}
 
@@ -63,10 +63,10 @@ if(isset($_POST['action'])) {
 	}
 	elseif($_POST['action'] == 'removeAbsence') {
 		if($db->removeAbsence($_POST['id'])) {
-			$info = 'Abwesenheit wurde entfernt';
+			$info = LANG['absence_removed'];
 			$infoclass = 'green';
 		} else {
-			$info = 'Abwesenheit konnte nicht entfernt werden: '.$db->getLastStatement()->error;
+			$info = LANG['absence_could_not_be_removed'].' '.$db->getLastStatement()->error;
 			$infoclass = 'red';
 		}
 	}
@@ -86,21 +86,21 @@ function isAllowedForUser($user_id) {
 ?>
 
 <div class="contentbox small">
-	<h2>Kurzfristige Abwesenheit eintragen</h2>
+	<h2><?php echo LANG['enter_short_absence']; ?></h2>
 	<?php if($info != null) { ?>
 		<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
 	<?php } ?>
 	<p>
-		Mit dieser Funktion können Dienstplan-Admins Abwesenheiten für dem Dienstplan zugeordnete Mitarbeiter eintragen.
+		<?php echo LANG['enter_short_absence_description']; ?>
 	</p>
 	<p>
-		Im Unterschied zum Modul "Abwesenheiten eintragen" werden hier alle dem Mitarbeiter zugewiesenen Dienste innerhalb des gewählten Zeitraums entfernt, d.h. sie werden sofort vakant.
+		<?php echo LANG['enter_short_absence_description2']; ?>
 	</p>
-	<form method="POST" onsubmit="return confirm('Hiermit werden alle dem Mitarbeiter zugeordneten Dienste innerhalb des ausgewählten Zeitraums vakant')">
+	<form method="POST" onsubmit="return confirm('<?php echo LANG['short_absence_assigned_service_note']; ?>')">
 		<input type="hidden" id="action" name="action" value="absence">
 		<table>
 			<tr>
-				<th>Mitarbeiter:</th>
+				<th><?php echo LANG['employee']; ?>:</th>
 				<td>
 					<select name="user" autofocus="true">
 						<?php
@@ -113,7 +113,7 @@ function isAllowedForUser($user_id) {
 				</td>
 			</tr>
 			<tr>
-				<th>Art:</th>
+				<th><?php echo LANG['type']; ?>:</th>
 				<td>
 					<select name="type">
 						<?php foreach($db->getAbsentTypes() as $at) {
@@ -123,24 +123,24 @@ function isAllowedForUser($user_id) {
 				</td>
 			</tr>
 			<tr>
-				<th>Beginn:</th>
+				<th><?php echo LANG['begin']; ?>:</th>
 				<td><input type="date" name="start" value=""></td>
 			</tr>
 			<tr>
-				<th>Ende:</th>
+				<th><?php echo LANG['end']; ?>:</th>
 				<td><input type="date" name="end" value=""></td>
 			</tr>
 			<tr>
-				<th>Kommentar:</th>
+				<th><?php echo LANG['comment']; ?>:</th>
 				<td><input type="text" name="comment" value="" placeholder="(optional)"></td>
 			</tr>
 			<tr>
 				<th></th>
-				<td><button><img src="img/ok.svg">&nbsp;Speichern</button></td>
+				<td><button><img src="img/ok.svg">&nbsp;<?php echo LANG['save']; ?></button></td>
 			</tr>
 			<tr>
 				<th></th>
-				<td><a class="button fullwidth" href="?view=absence"><img src="img/absent.svg">&nbsp;Zum normalen Abwesenheits-Modul springen</a></td>
+				<td><a class="button fullwidth" href="?view=absence"><img src="img/absent.svg">&nbsp;<?php echo LANG['jump_to_normal_absence_module']; ?></a></td>
 			</tr>
 		</table>
 	</form>

@@ -13,7 +13,7 @@ if(isset($_POST['action'])) {
 
 		if(hasRights($_POST['id'])) {
 			if($db->approveAbsence1($_POST['id'], 1, $currentUser->id)) {
-				$info = 'Abwesenheit wurde bestätigt';
+				$info = LANG['absence_approved'];
 				$infoclass = 'green';
 				// send mail to employee
 				if(boolval($db->getSetting('absence_mails'))) {
@@ -21,11 +21,11 @@ if(isset($_POST['action'])) {
 					$mailer->mailAbsenceApproved1($_POST['id']);
 				}
 			} else {
-				$info = 'Abwesenheit konnte nicht bestätigt werden: '.$db->getLastStatement()->error;
+				$info = LANG['absence_could_not_be_approved'].' '.$db->getLastStatement()->error;
 				$infoclass = 'red';
 			}
 		} else {
-			$info = 'Sie besitzen keine Berechtigung diesen Urlaub zu bestätigen';
+			$info = LANG['missing_rights_to_approve_this_absence'];
 			$infoclass = 'red';
 		}
 
@@ -34,7 +34,7 @@ if(isset($_POST['action'])) {
 
 		if(hasRights($_POST['id']) && $currentUser->superadmin > 0) {
 			if($db->approveAbsence2($_POST['id'], 1, $currentUser->id)) {
-				$info = 'Abwesenheit wurde genehmigt';
+				$info = LANG['absence_confirmed'];
 				$infoclass = 'green';
 				// send mail to employee
 				if(boolval($db->getSetting('absence_mails'))) {
@@ -42,11 +42,11 @@ if(isset($_POST['action'])) {
 					$mailer->mailAbsenceApproved2($_POST['id']);
 				}
 			} else {
-				$info = 'Abwesenheit konnte nicht genehmigt werden: '.$db->getLastStatement()->error;
+				$info = LANG['absence_could_not_be_confirmed'].' '.$db->getLastStatement()->error;
 				$infoclass = 'red';
 			}
 		} else {
-			$info = 'Sie besitzen keine Berechtigung diesen Urlaub zu genehmigen';
+			$info = LANG['missing_rights_to_confirm_this_absence'];
 			$infoclass = 'red';
 		}
 
@@ -60,14 +60,14 @@ if(isset($_POST['action'])) {
 				$mailer->mailAbsenceDeclined($_POST['id']);
 			}
 			if($db->removeAbsence($_POST['id'])) {
-				$info = 'Abwesenheit wurde abgelehnt';
+				$info = LANG['absence_declined'];
 				$infoclass = 'green';
 			} else {
-				$info = 'Abwesenheit konnte nicht abgelehnt werden: '.$db->getLastStatement()->error;
+				$info = LANG['absence_could_not_be_declined'].' '.$db->getLastStatement()->error;
 				$infoclass = 'red';
 			}
 		} else {
-			$info = 'Sie besitzen keine Berechtigung diesen Urlaub abzulehnen';
+			$info = LANG['missing_rights_to_decline_this_absence'];
 			$infoclass = 'red';
 		}
 
@@ -118,34 +118,34 @@ function echoUnapprovedAbsences($roster_id) {
 
 			if($db->getSetting('absence_confirmation_required') == 1
 			|| $db->getSetting('absence_confirmation_required') == 2) {
-				echo "<form method=\"POST\" onsubmit=\"return confirm('Abwesenheit bestätigen?')\">"
+				echo "<form method=\"POST\" onsubmit=\"return confirm('".LANG['approve_absence_confirmation']."')\">"
 					.'<input type="hidden" name="action" value="approveAbsence1">'
 					.'<input type="hidden" name="id" value="'.$a->id.'">';
 				if($a->approved1 > 0) {
-					echo '<button disabled="true"><img src="img/ok1.svg">&nbsp;Bestätigt</button>';
+					echo '<button disabled="true"><img src="img/ok1.svg">&nbsp;'.LANG['approved'].'</button>';
 				} else {
-					echo '<button><img src="img/ok1.svg">&nbsp;Bestätigen</button>';
+					echo '<button><img src="img/ok1.svg">&nbsp;'.LANG['approve'].'</button>';
 				}
 				echo '</form>';
 			}
 
 			if($db->getSetting('absence_confirmation_required') == 2
 			&& $currentUser->superadmin > 0) {
-				echo "<form method=\"POST\" onsubmit=\"return confirm('Abwesenheit genehmigen?')\">"
+				echo "<form method=\"POST\" onsubmit=\"return confirm('".LANG['confirm_absence_confirmation']."')\">"
 					.'<input type="hidden" name="action" value="approveAbsence2">'
 					.'<input type="hidden" name="id" value="'.$a->id.'">';
 				if($a->approved2 > 0) {
-					echo '<button disabled="true"><img src="img/ok2.svg">&nbsp;Genehmigt</button>';
+					echo '<button disabled="true"><img src="img/ok2.svg">&nbsp;'.LANG['confirmed'].'</button>';
 				} else {
-					echo '<button><img src="img/ok2.svg">&nbsp;Genehmigen</button>';
+					echo '<button><img src="img/ok2.svg">&nbsp;'.LANG['confirm'].'</button>';
 				}
 				echo '</form>';
 			}
 
-			echo "<form method=\"POST\" onsubmit=\"return confirm('Abwesenheit ABLEHNEN?')\">"
+			echo "<form method=\"POST\" onsubmit=\"return confirm('".LANG['decline_absence_confirmation']."')\">"
 				.'<input type="hidden" name="action" value="declineAbsence">'
 				.'<input type="hidden" name="id" value="'.$a->id.'">'
-				.'<button><img src="img/cancel.svg">&nbsp;Ablehnen</button>'
+				.'<button><img src="img/cancel.svg">&nbsp;'.LANG['decline'].'</button>'
 				.'</form>';
 			echo '</td>';
 			echo '</tr>';
@@ -155,18 +155,18 @@ function echoUnapprovedAbsences($roster_id) {
 ?>
 
 <?php if($db->getSetting('absence_confirmation_required') != 1 && $db->getSetting('absence_confirmation_required') != 2) { ?>
-<div class="infobox yellow">Sie können keine Abwesenheiten freigeben, da Sie die Einstellung getroffen haben, dass Abwesenheiten nach Erstellung sofort freigegeben sind.</div>
+<div class="infobox yellow"><?php echo LANG['absence_confirmation_disabled']; ?></div>
 <?php } elseif($currentUser->superadmin == 0 && count($adminRosters) == 0) { ?>
-<div class="infobox yellow">Sie besitzen keine Adminrechte. Sie benötigen Adminrechte für mindestens einen Dienstplan, um Urlaube der zugehörigen Nutzer freigeben zu können.</div>
+<div class="infobox yellow"><?php echo LANG['absence_confirmation_rights_missing']; ?></div>
 <?php } else { ?>
 <div class="contentbox">
-	<h2>Abwesenheiten freigeben</h2>
+	<h2><?php echo LANG['approve_absence']; ?></h2>
 	<?php if($info != null) { ?>
 		<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
 	<?php } ?>
 		<table class="data">
 			<tr>
-				<th>Mitarbeiter</th><th>Beginn</th><th>Ende</th><th>Kommentar</th><th>Freigegeben</th><th>Aktion</th>
+				<th><?php echo LANG['employee']; ?></th><th><?php echo LANG['begin']; ?></th><th><?php echo LANG['end']; ?></th><th><?php echo LANG['comment']; ?></th><th><?php echo LANG['confirmed_approved']; ?></th><th><?php echo LANG['action']; ?></th>
 			</tr>
 			<?php
 			if($currentUser->superadmin > 0) {

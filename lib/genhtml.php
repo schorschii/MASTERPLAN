@@ -149,9 +149,9 @@ class genhtml {
 
 		$html = '';
 		if($roster_id == -1) {
-			$html.= '<h2>Alle Mitarbeiter, Woche '.date('W', strtotime($strWeek)).'</h2>';
+			$html.= '<h2>'.LANG['all_employees'].', '.LANG['week'].' '.date('W', strtotime($strWeek)).'</h2>';
 		} else {
-			$html.= '<h2>Mitarbeiter '.$roster->title.', Woche '.date('W', strtotime($strWeek)).'</h2>';
+			$html.= '<h2>'.LANG['employee'].' '.$roster->title.', '.LANG['week'].' '.date('W', strtotime($strWeek)).'</h2>';
 		}
 		$html.= $this->styleDefinition;
 		$html.= '<table class="tblMasterplan">';
@@ -224,9 +224,9 @@ class genhtml {
 
 		$html = '';
 		if($roster_id == -1) {
-			$html.= '<h2>Freie Mitarbeiter, Woche '.date('W', strtotime($strWeek)).'</h2>';
+			$html.= '<h2>'.LANG['available_employees'].', '.LANG['week'].' '.date('W', strtotime($strWeek)).'</h2>';
 		} else {
-			$html.= '<h2>Freie Mitarbeiter '.$roster->title.', Woche '.date('W', strtotime($strWeek)).'</h2>';
+			$html.= '<h2>'.LANG['available_employees'].' '.$roster->title.', '.LANG['week'].' '.date('W', strtotime($strWeek)).'</h2>';
 		}
 		$html.= $this->styleDefinition;
 		$html.= '<table class="tblMasterplan">';

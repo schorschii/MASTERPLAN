@@ -5,7 +5,7 @@ $infoclass = null;
 // rights check
 if(!isset($currentUser)) die();
 if($currentUser->superadmin == 0) {
-	die('<div class="infobox red">Sie benötigen Superadmin-Berechtigungen um diese Seite aufzurufen</div>');
+	die('<div class="infobox red">'.LANG['page_superadmin_right_needed'].'</div>');
 }
 
 // create/update
@@ -17,11 +17,11 @@ if(!empty($_POST['title'])) {
 		$result = $db->insertRoster($_POST['title'], $_POST['autoplan_logic'], $_POST['ignore_working_hours'], $_POST['icsmail_sender_name'], $_POST['icsmail_sender_address']);
 	}
 	if($result) {
-		$info = "Dienstplan gespeichert";
-		$infoclass = "green";
+		$info = LANG['roster_saved'];
+		$infoclass = 'green';
 	} else {
-		$info = "Dienstplan konnte nicht gespeichert werden";
-		$infoclass = "red";
+		$info = LANG['error'].': '.$db->getLastStatement()->error;
+		$infoclass = 'red';
 	}
 }
 
@@ -35,7 +35,7 @@ $prefillIcsMailSenderAddress = '';
 $r = null;
 if(isset($_GET['id'])) {
 	$r = $db->getRoster($_GET['id']);
-	if($r == null) die('<div class="infobox red">Dienstplan nicht gefunden</div>');
+	if($r == null) die('<div class="infobox red">'.LANG['not_found'].'</div>');
 	$prefillTitle = $r->title;
 	$prefillAutoplanLogic = $r->autoplan_logic;
 	$prefillIgnoreWorkingHours = $r->ignore_working_hours;
@@ -46,9 +46,9 @@ if(isset($_GET['id'])) {
 
 <div class='contentbox small'>
 <?php if($r == null) { ?>
-	<h2>Neuer Dienstplan</h2>
+	<h2><?php echo LANG['new_roster']; ?></h2>
 <?php } else { ?>
-	<h2>Dienstplan bearbeiten</h2>
+	<h2><?php echo LANG['edit_roster']; ?></h2>
 <?php } ?>
 <?php if($info != null) { ?>
 	<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
@@ -59,11 +59,11 @@ if(isset($_GET['id'])) {
 	<?php } ?>
 	<table>
 		<tr>
-			<th>Bezeichnung:</th>
+			<th><?php echo LANG['title']; ?>:</th>
 			<td><input type="text" name="title" autofocus="true" value="<?php echo htmlspecialchars($prefillTitle); ?>"></td>
 		</tr>
 		<tr>
-			<th>Autoplan-Logik:</th>
+			<th><?php echo LANG['autoplan_logic']; ?>:</th>
 			<td>
 				<select name="autoplan_logic">
 					<option value="0" <?php if($prefillAutoplanLogic==0) echo "selected"; ?>>Mitarbeiter nach freien Kapazitäten verplanen</option>
@@ -71,7 +71,7 @@ if(isset($_GET['id'])) {
 			</td>
 		</tr>
 		<tr>
-			<th>Besonderheiten:</th>
+			<th><?php echo LANG['specials']; ?>:</th>
 			<td>
 				<label>
 					<input type="hidden" name="ignore_working_hours" value="0">
@@ -83,22 +83,22 @@ if(isset($_GET['id'])) {
 			<td colspan="2">&nbsp;</td>
 		</tr>
 		<tr>
-			<th colspan="2"><h3>Termineinladungs-Mail - Optionen</h3></th>
+			<th colspan="2"><h3><?php echo LANG['service_invitation_mail_options']; ?></h3></th>
 		</tr>
 		<tr>
-			<th>Absendername:</th>
-			<td><input type="text" name="icsmail_sender_name" placeholder="(optional)" value="<?php echo htmlspecialchars($prefillIcsMailSenderName); ?>"></td>
+			<th><?php echo LANG['sender_name']; ?>:</th>
+			<td><input type="text" name="icsmail_sender_name" placeholder="(<?php echo LANG['optional']; ?>)" value="<?php echo htmlspecialchars($prefillIcsMailSenderName); ?>"></td>
 		</tr>
 		<tr>
-			<th>Absenderadresse:</th>
-			<td><input type="email" name="icsmail_sender_address" placeholder="(optional)" value="<?php echo htmlspecialchars($prefillIcsMailSenderAddress); ?>"></td>
+			<th><?php echo LANG['sender_address']; ?>:</th>
+			<td><input type="email" name="icsmail_sender_address" placeholder="(<?php echo LANG['optional']; ?>)" value="<?php echo htmlspecialchars($prefillIcsMailSenderAddress); ?>"></td>
 		</tr>
 		<tr>
 			<td colspan="2">&nbsp;</td>
 		</tr>
 		<tr>
 			<th></th>
-			<td><button><img src='img/ok.svg'>&nbsp;Speichern</button></td>
+			<td><button><img src='img/ok.svg'>&nbsp;<?php echo LANG['save']; ?></button></td>
 		</tr>
 	</table>
 </form>

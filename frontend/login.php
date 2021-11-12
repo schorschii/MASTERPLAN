@@ -20,11 +20,11 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
 	$user = $db->getUserByLogin($_POST['username']);
 	if($user == null) {
 		sleep(2);
-		$info = "Benutzer existiert nicht";
-		$infoclass = "red";
+		$info = LANG['user_does_not_exist'];
+		$infoclass = 'red';
 	} elseif($user->locked > 0) {
-		$info = "Benutzer gesperrt";
-		$infoclass = "red";
+		$info = LANG['user_locked'];
+		$infoclass = 'red';
 	} else {
 		if(validatePassword($user, $_POST['password'])) {
 			$_SESSION['mp_login'] = $user->login;
@@ -34,16 +34,16 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
 			die();
 		} else {
 			sleep(2);
-			$info = "Anmeldung fehlgeschlagen";
-			$infoclass = "red";
+			$info = LANG['login_failed'];
+			$infoclass = 'red';
 		}
 	}
 }
 elseif(isset($_GET['logout'])) {
 	if(isset($_SESSION['mp_login'])) {
 		session_destroy();
-		$info = "Abmeldung erfolgreich";
-		$infoclass = "green";
+		$info = LANG['logout_successful'];
+		$infoclass = 'green';
 	}
 }
 
@@ -66,7 +66,7 @@ function validatePassword($userObject, $checkPassword) {
 <!DOCTYPE html>
 <html>
 <head>
-	<title>MASTERPLAN</title>
+	<title><?php echo LANG['app_name']; ?></title>
 	<?php require('head.inc.php'); ?>
 	<?php if(file_exists(TMP_FILES.'/'.'bg.image')) { ?>
 		<style>
@@ -95,9 +95,9 @@ function validatePassword($userObject, $checkPassword) {
 			<?php } ?>
 			<?php if($browserFail == null) { ?>
 			<form method="POST" onsubmit="beginFadeOutAnimation()" class="flex">
-				<input type="text" id="txtUsername" name="username" placeholder="Benutzername" class="flex-fill" autofocus="true">
-				<input type="password" id="txtPassword" name="password" placeholder="Kennwort" class="flex-fill">
-				<button id="btnSubmit">Anmelden</button>
+				<input type="text" id="txtUsername" name="username" placeholder="<?php echo LANG['username']; ?>" class="flex-fill" autofocus="true">
+				<input type="password" id="txtPassword" name="password" placeholder="<?php echo LANG['password']; ?>" class="flex-fill">
+				<button id="btnSubmit"><?php echo LANG['login']; ?></button>
 			</form>
 			<?php } else { ?>
 				<div class="infobox yellow"><?php echo $browserFail; ?></div>

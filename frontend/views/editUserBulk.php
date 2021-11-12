@@ -5,7 +5,7 @@ $infoclass = null;
 // rights check
 if(!isset($currentUser)) die();
 if($currentUser->superadmin == 0) {
-	die('<div class="infobox red">Sie benötigen Superadmin-Berechtigungen um diese Seite aufzurufen</div>');
+	die('<div class="infobox red">'.LANG['page_superadmin_right_needed'].'</div>');
 }
 
 $users = [];
@@ -16,7 +16,7 @@ foreach(explode(',',$_GET['users']) as $user_id) {
 	}
 }
 if(count($users) == 0)
-	die('<div class="infobox red">Keine Benutzer ausgewählt</div>');
+	die('<div class="infobox red">'.LANG['no_user_selected'].'</div>');
 
 if(!empty($_POST['start_date'])
 || !empty($_POST['description'])
@@ -66,20 +66,20 @@ if(!empty($_POST['start_date'])
 		die();
 	} else {
 		$db->rollbackTransaction();
-		$info = 'Benutzer konnten nicht bearbeitet werden: '.$db->getLastStatement()->error;
+		$info = LANG['error'].': '.$db->getLastStatement()->error;
 		$infoclass = 'red';
 	}
 }
 ?>
 <div class="contentbox small">
-	<h2>Benutzer bearbeiten</h2>
+	<h2><?php echo LANG['edit_users']; ?></h2>
 	<?php if($info != null) { ?>
 		<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
 	<?php } ?>
 	<form method="POST" class="marginbottom">
 		<table>
 			<tr>
-				<th>Ausgewählte Benutzer:</th>
+				<th><?php echo LANG['selected_users']; ?>:</th>
 				<td>
 					<input type="text" disabled="true" value="<?php echo count($users); ?>">
 				</td>
@@ -88,7 +88,7 @@ if(!empty($_POST['start_date'])
 				<th>
 					<label>
 						<input type="checkbox" onchange="start_date.disabled = !this.checked">
-						Arbeitsbeginn:
+						<?php echo LANG['work_begin']; ?>:
 					</label>
 				</th>
 				<td><input type="date" name="start_date" id="start_date" disabled="true"></td>
@@ -97,7 +97,7 @@ if(!empty($_POST['start_date'])
 				<th>
 					<label>
 						<input type="checkbox" onchange="description.disabled = !this.checked">
-						Beschreibung:
+						<?php echo LANG['description']; ?>:
 					</label>
 				</th>
 				<td><input type="text" name="description" id="description" disabled="true"></td>
@@ -106,7 +106,7 @@ if(!empty($_POST['start_date'])
 				<th>
 					<label>
 						<input type="checkbox" onchange="password.disabled = !this.checked">
-						Kennwort:
+						<?php echo LANG['password']; ?>:
 					</label>
 				</th>
 				<td><input type="password" name="password" id="password" disabled="true"></td>
@@ -115,7 +115,7 @@ if(!empty($_POST['start_date'])
 				<th>
 					<label>
 						<input type="checkbox" onchange="max_hours_per_day.disabled = !this.checked">
-						Max. Std./Tag:
+						<?php echo LANG['max_hrs_day']; ?>:
 					</label>
 				</th>
 				<td><input type="number" name="max_hours_per_day" id="max_hours_per_day" value="-1" disabled="true"></td>
@@ -124,7 +124,7 @@ if(!empty($_POST['start_date'])
 				<th>
 					<label>
 						<input type="checkbox" onchange="max_services_per_week.disabled = !this.checked">
-						Max. Dienste/Woche:
+						<?php echo LANG['max_services_week']; ?>:
 					</label>
 				</th>
 				<td><input type="number" name="max_services_per_week" id="max_services_per_week" value="-1" disabled="true"></td>
@@ -133,7 +133,7 @@ if(!empty($_POST['start_date'])
 				<th>
 					<label>
 						<input type="checkbox" onchange="max_hours_per_week.disabled = !this.checked">
-						Max Std./Woche:
+						<?php echo LANG['max_hrs_week']; ?>:
 					</label>
 				</th>
 				<td><input type="number" name="max_hours_per_week" id="max_hours_per_week" value="-1" disabled="true"></td>
@@ -142,7 +142,7 @@ if(!empty($_POST['start_date'])
 				<th>
 					<label>
 						<input type="checkbox" onchange="max_hours_per_month.disabled = !this.checked">
-						Max Std./Monat:
+						<?php echo LANG['max_hrs_month']; ?>:
 					</label>
 				</th>
 				<td><input type="number" name="max_hours_per_month" id="max_hours_per_month" value="-1" disabled="true"></td>
@@ -151,14 +151,14 @@ if(!empty($_POST['start_date'])
 				<th>
 					<label>
 						<input type="checkbox" onchange="color.disabled = !this.checked">
-						Farbe:
+						<?php echo LANG['color']; ?>:
 					</label>
 				</th>
 				<td><input type="color" name="color" id="color" value="#ececec" disabled="true"></td>
 			</tr>
 			<tr>
 				<th></th>
-				<td><button><img src='img/ok.svg'>&nbsp;Übernehmen</button></td>
+				<td><button><img src='img/ok.svg'>&nbsp;<?php echo LANG['apply']; ?></button></td>
 			</tr>
 		</table>
 	</form>

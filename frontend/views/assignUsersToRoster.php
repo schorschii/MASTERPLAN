@@ -5,7 +5,7 @@ $infoclass = null;
 // rights check
 if(!isset($currentUser)) die();
 if($currentUser->superadmin == 0) {
-	die('<div class="infobox red">Sie benötigen Superadmin-Berechtigungen um diese Seite aufzurufen</div>');
+	die('<div class="infobox red">'.LANG['page_superadmin_right_needed'].'</div>');
 }
 
 $roster = null;
@@ -13,7 +13,7 @@ $roster = null;
 if(isset($_GET['roster'])) {
 	$roster = $db->getRoster($_GET['roster']);
 } else {
-	die('<div class="infobox red">Dienstplan nicht gefunden</div>');
+	die('<div class="infobox red">'.LANG['roster_not_found'].'</div>');
 }
 
 if(!empty($_POST['roster']) && !empty($_POST['users'])) {
@@ -32,20 +32,20 @@ if(!empty($_POST['roster']) && !empty($_POST['users'])) {
 		die();
 	} else {
 		$db->rollbackTransaction();
-		$info = 'Benutzer konnten nicht zugeordnet werden: '.$db->getLastStatement()->error;
+		$info = LANG['employee_could_not_be_assigned'].' '.$db->getLastStatement()->error;
 		$infoclass = 'red';
 	}
 }
 ?>
 <div class="contentbox small">
-	<h2>Mitarbeiter zuweisen</h2>
+	<h2><?php echo LANG['assign_employee']; ?></h2>
 	<?php if($info != null) { ?>
 		<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
 	<?php } ?>
 	<form method="POST" class="marginbottom">
 		<table>
 			<tr>
-				<th>Dienstplan:</th>
+				<th><?php echo LANG['roster']; ?>:</th>
 				<td>
 					<input type="hidden" name="roster" value="<?php echo $roster->id; ?>">
 					<input type="text" disabled="true" value="<?php echo htmlspecialchars($roster->title); ?>">
@@ -53,9 +53,9 @@ if(!empty($_POST['roster']) && !empty($_POST['users'])) {
 			</tr>
 			<tr>
 				<th>
-					Mitarbeiter:
+					<?php echo LANG['employees']; ?>:
 					<div class="hint" style="width: 120px;">
-						Halten Sie STRG gedrückt, um mehrere Mitarbeiter auszuwählen.
+						<?php echo LANG['ctrl_to_select_multiple']; ?>
 					</div>
 				</th>
 				<td>
@@ -76,11 +76,11 @@ if(!empty($_POST['roster']) && !empty($_POST['users'])) {
 			</tr>
 			<tr>
 				<td></td>
-				<td><button><img src='img/ok.svg'>&nbsp;Speichern</button></td>
+				<td><button><img src='img/ok.svg'>&nbsp;<?php echo LANG['save']; ?></button></td>
 			</tr>
 			<tr>
 				<td></td>
-				<td><button type="reset"><img src='img/refresh.svg'>&nbsp;Zurücksetzen</button></td>
+				<td><button type="reset"><img src='img/refresh.svg'>&nbsp;<?php echo LANG['reset']; ?></button></td>
 			</tr>
 		</table>
 	</form>

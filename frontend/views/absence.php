@@ -36,10 +36,10 @@ if(isset($_POST['action'])) {
 			}
 
 			if($hasService) {
-				$info = 'Abwesenheit wurde eingetragen. Bitte beachten Sie, dass Sie innerhalb dieses Zeitraums bereits für Dienste eingeteilt sind. Dies muss manuell korrigiert werden.';
+				$info = LANG['absence_saved_conflict_with_services'];
 				$infoclass = 'yellow';
 			} else {
-				$info = 'Abwesenheit wurde eingetragen';
+				$info = LANG['absence_saved'];
 				$infoclass = 'green';
 			}
 
@@ -50,27 +50,27 @@ if(isset($_POST['action'])) {
 			}
 
 		} else {
-			$info = 'Abwesenheit konnte nicht eingetragen werden: '.$db->getLastStatement()->error;
+			$info = LANG['absence_could_not_be_saved'].' '.$db->getLastStatement()->error;
 			$infoclass = 'red';
 		}
 
 		} else {
-			$info = 'Der angegebene Zeitraum ist zu groß (max. 60 Tage). Bitte teilen Sie die Abwesenheiten ggf. in mehrere Teile auf.';
+			$info = LANG['absence_too_long'];
 			$infoclass = 'red';
 		}
 
 		} else {
-			$info = 'Enddatum liegt vor dem Startdatum!';
+			$info = LANG['end_date_before_start_date'];
 			$infoclass = 'red';
 		}
 
 	}
 	elseif($_POST['action'] == 'removeAbsence') {
 		if($db->removeAbsence($_POST['id'])) {
-			$info = 'Abwesenheit wurde entfernt';
+			$info = LANG['absence_removed'];
 			$infoclass = 'green';
 		} else {
-			$info = 'Abwesenheit konnte nicht entfernt werden: '.$db->getLastStatement()->error;
+			$info = LANG['absence_could_not_be_removed'].' '.$db->getLastStatement()->error;
 			$infoclass = 'red';
 		}
 	}
@@ -78,7 +78,7 @@ if(isset($_POST['action'])) {
 ?>
 
 <div class="contentbox small">
-	<h2>Abwesenheit eintragen</h2>
+	<h2><?php echo LANG['register_absence']; ?></h2>
 	<?php if($info != null) { ?>
 		<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
 	<?php } ?>
@@ -87,7 +87,7 @@ if(isset($_POST['action'])) {
 		<table>
 			<?php if($currentUser->superadmin > 0) { ?>
 				<tr>
-					<th>Mitarbeiter:</th>
+					<th><?php echo LANG['employee']; ?>:</th>
 					<td>
 						<select name="user">
 							<?php
@@ -102,11 +102,11 @@ if(isset($_POST['action'])) {
 				</tr>
 				<tr>
 					<th></th>
-					<td><button onclick="action.value='view_foreign_absences'"><img src="img/absent.svg">&nbsp;Zeige Abwesenheiten dieses Mitarbeiters</button></td>
+					<td><button onclick="action.value='view_foreign_absences'"><img src="img/absent.svg">&nbsp;<?php echo LANG['show_absences_of_this_employee']; ?></button></td>
 				</tr>
 			<?php } ?>
 			<tr>
-				<th>Art:</th>
+				<th><?php echo LANG['type']; ?>:</th>
 				<td>
 					<select name="type" autofocus="true">
 						<?php foreach($db->getAbsentTypes() as $at) {
@@ -116,20 +116,20 @@ if(isset($_POST['action'])) {
 				</td>
 			</tr>
 			<tr>
-				<th>Beginn:</th>
+				<th><?php echo LANG['begin']; ?>:</th>
 				<td><input type="date" name="start" value=""></td>
 			</tr>
 			<tr>
-				<th>Ende:</th>
+				<th><?php echo LANG['end']; ?>:</th>
 				<td><input type="date" name="end" value=""></td>
 			</tr>
 			<tr>
-				<th>Kommentar:</th>
-				<td><input type="text" name="comment" value="" placeholder="(optional)"></td>
+				<th><?php echo LANG['comment']; ?>:</th>
+				<td><input type="text" name="comment" value="" placeholder="(<?php echo LANG['optional']; ?>)"></td>
 			</tr>
 			<tr>
 				<th></th>
-				<td><button><img src="img/ok.svg">&nbsp;Speichern</button></td>
+				<td><button><img src="img/ok.svg">&nbsp;<?php echo LANG['save']; ?></button></td>
 			</tr>
 		</table>
 	</form>
@@ -142,27 +142,27 @@ if(isset($_POST['action'])) {
 		$user = $db->getUser($_POST['user']);
 		if($user != null) {
 			$userid = $user->id;
-			echo '<h2>Abwesenheiten von '.htmlspecialchars($user->fullname).' ('.htmlspecialchars($user->login).')</h2>';
+			echo '<h2>'.str_replace('%1', htmlspecialchars($user->fullname).' ('.htmlspecialchars($user->login).')', LANG['absences_of']).'</h2>';
 		}
 	} else {
-		echo '<h2>Meine eingetragenen Abwesenheiten</h2>';
+		echo '<h2>'.LANG['my_saved_absences'].'</h2>';
 	}
 	$absences = $db->getFutureAbsencesByUser($userid);
 	if(count($absences) == 0) {
 	?>
-		<div class="infobox">Es sind keine Abwesenheiten in der Zukunft eingetragen</div>
+		<div class="infobox"><?php echo LANG['no_absences_in_the_future']; ?></div>
 	<?php } else { ?>
 		<div class="marginbottom">
 			<form method="GET" class="inlineblock" action="export.php" target="_blank">
 				<input type="hidden" name="export" value="absence">
 				<input type="hidden" name="type" value="pdf">
 				<input type="hidden" name="user" value="<?php echo $currentUser->id; ?>">
-				<button><img id="btnExportPDF" src="img/export.svg">&nbsp;PDF-Export</button>
+				<button><img id="btnExportPDF" src="img/export.svg">&nbsp;<?php echo LANG['pdf_export']; ?></button>
 			</form>
 		</div>
 		<table class="data">
 			<tr>
-				<th>Kürzel</th><th>Beginn</th><th>Ende</th><th>Best./Genehmigt</th><th>Aktion</th>
+				<th><?php echo LANG['short_name']; ?></th><th><?php echo LANG['begin']; ?></th><th><?php echo LANG['end']; ?></th><th><?php echo LANG['confirmed_approved']; ?></th><th><?php echo LANG['action']; ?></th>
 			</tr>
 			<?php
 			$aplan = new autoplan($db);
@@ -182,9 +182,9 @@ if(isset($_POST['action'])) {
 					.'</td>'
 					.'<td>'.htmlspecialchars(strftime(DATE_FORMAT, strtotime($a->start))).'</td>'
 					.'<td>'.htmlspecialchars(strftime(DATE_FORMAT, strtotime($a->end))).'</td>'
-					.'<td>'.($approved ? 'Ja' : 'Nein').htmlspecialchars($approved_user_text).'</td>'
+					.'<td>'.($approved ? LANG['yes'] : LANG['no']).htmlspecialchars($approved_user_text).'</td>'
 					.'<td class="wrapcontent center">'
-					. '<form method="POST" onsubmit="return confirm('."'".'Diese Abwesenheit wirklich löschen?'."'".')">'
+					. '<form method="POST" onsubmit="return confirm('."'".LANG['really_remove_absence']."'".')">'
 					. '<input type="hidden" name="action" value="removeAbsence">'
 					. '<input type="hidden" name="id" value="'.$a->id.'">'
 					. '<button><img src="img/delete.svg"></button>'

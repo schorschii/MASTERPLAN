@@ -5,7 +5,7 @@ $infoclass = null;
 // rights check
 if(!isset($currentUser)) die();
 if($currentUser->superadmin == 0) {
-	die('<div class="infobox red">Sie benötigen Superadmin-Berechtigungen um diese Seite aufzurufen</div>');
+	die('<div class="infobox red">'.LANG['page_superadmin_right_needed'].'</div>');
 }
 
 // create/update
@@ -27,12 +27,12 @@ if(!empty($_POST['shortname'])) {
 			header('Location: index.php?view=rosters');
 			die();
 		} else {
-			$info = "Dienst gespeichert";
-			$infoclass = "green";
+			$info = LANG['service_saved'];
+			$infoclass = 'green';
 		}
 	} else {
-		$info = "Dienst konnte nicht gespeichert werden: ".$db->getLastStatement()->error;
-		$infoclass = "red";
+		$info = LANG['error'].': '.$db->getLastStatement()->error;
+		$infoclass = 'red';
 	}
 }
 
@@ -60,7 +60,7 @@ $preselectWd7 = 0;
 $s = null;
 if(isset($_GET['id'])) {
 	$s = $db->getService($_GET['id']);
-	if($s == null) die('<div class="infobox red">Dienst nicht gefunden</div>');
+	if($s == null) die('<div class="infobox red">'.LANG['not_found'].'</div>');
 	$preselectRoster = $s->roster_id;
 	$prefillShortname = $s->shortname;
 	$prefillTitle = $s->title;
@@ -83,9 +83,9 @@ if(isset($_GET['id'])) {
 
 <div class='contentbox small'>
 	<?php if($s == null) { ?>
-		<h2>Neuer Dienst</h2>
+		<h2><?php echo LANG['new_service']; ?></h2>
 	<?php } else { ?>
-		<h2>Dienst bearbeiten</h2>
+		<h2><?php echo LANG['edit_service']; ?></h2>
 	<?php } ?>
 	<?php if($info != null) { ?>
 		<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
@@ -98,7 +98,7 @@ if(isset($_GET['id'])) {
 
 		<table>
 			<tr>
-				<th>Dienstplan:</th>
+				<th><?php echo LANG['roster']; ?>:</th>
 				<td>
 					<select name="roster">
 						<?php foreach($db->getRosters() as $r) {
@@ -108,77 +108,77 @@ if(isset($_GET['id'])) {
 				</td>
 			</tr>
 			<tr>
-				<th>Kürzel:</th>
+				<th><?php echo LANG['short_name']; ?>:</th>
 				<td><input type="text" name="shortname" maxlength="10" autofocus="true" value="<?php echo htmlspecialchars($prefillShortname); ?>"></td>
 			</tr>
 			<tr>
-				<th>Bezeichnung:</th>
-				<td><input type="text" name="title" placeholder="(optional)" value="<?php echo htmlspecialchars($prefillTitle); ?>"></td>
+				<th><?php echo LANG['title']; ?>:</th>
+				<td><input type="text" name="title" placeholder="(<?php echo LANG['optional']; ?>)" value="<?php echo htmlspecialchars($prefillTitle); ?>"></td>
 			</tr>
 			<tr>
-				<th>Ort:</th>
-				<td><input type="text" name="location" placeholder="(optional)" value="<?php echo htmlspecialchars($prefillLocation); ?>"></td>
+				<th><?php echo LANG['location']; ?>:</th>
+				<td><input type="text" name="location" placeholder="(<?php echo LANG['optional']; ?>)" value="<?php echo htmlspecialchars($prefillLocation); ?>"></td>
 			</tr>
 			<tr>
-				<th>Anzahl Mitarbeiter:</th>
+				<th><?php echo LANG['number_of_employees']; ?>:</th>
 				<td><input type="number" name="employees" value="<?php echo htmlspecialchars($prefillEmployees); ?>"></td>
 			</tr>
 			<tr>
-				<th>Beginn:</th>
+				<th><?php echo LANG['begin']; ?>:</th>
 				<td><input type="time" name="start" value="<?php echo htmlspecialchars($prefillStart); ?>"></td>
 			</tr>
 			<tr>
-				<th>Ende:</th>
+				<th><?php echo LANG['end']; ?>:</th>
 				<td><input type="time" name="end" value="<?php echo htmlspecialchars($prefillEnd); ?>"></td>
 			</tr>
 			<tr>
-				<th>Gültig ab:</th>
+				<th><?php echo LANG['valid_from']; ?>:</th>
 				<td><input type="date" name="date_start" value="<?php echo htmlspecialchars($prefillDateStart); ?>"></td>
 			</tr>
 			<tr>
-				<th>Gültig bis:</th>
+				<th><?php echo LANG['valid_to']; ?>:</th>
 				<td><input type="date" name="date_end" value="<?php echo htmlspecialchars($prefillDateEnd); ?>"></td>
 			</tr>
 			<tr>
-				<th>Farbe:</th>
+				<th><?php echo LANG['color']; ?>:</th>
 				<td><input type="color" name="color" value="<?php echo htmlspecialchars($prefillColor); ?>"></td>
 			</tr>
 			<tr>
-				<th>Wochentage:</th>
+				<th><?php echo LANG['weekdays']; ?>:</th>
 				<td>
 					<div>
 						<input type="hidden" name="wd1" value="0">
-						<label><input type="checkbox" name="wd1" <?php echo htmlinput::check(1,$preselectWd1); ?>>Montag</label>
+						<label><input type="checkbox" name="wd1" <?php echo htmlinput::check(1,$preselectWd1); ?>><?php echo LANG['monday']; ?></label>
 					</div>
 					<div>
 						<input type="hidden" name="wd2" value="0">
-						<label><input type="checkbox" name="wd2" <?php echo htmlinput::check(1,$preselectWd2); ?>>Dienstag</label>
+						<label><input type="checkbox" name="wd2" <?php echo htmlinput::check(1,$preselectWd2); ?>><?php echo LANG['tuesday']; ?></label>
 					</div>
 					<div>
 						<input type="hidden" name="wd3" value="0">
-						<label><input type="checkbox" name="wd3" <?php echo htmlinput::check(1,$preselectWd3); ?>>Mittwoch</label>
+						<label><input type="checkbox" name="wd3" <?php echo htmlinput::check(1,$preselectWd3); ?>><?php echo LANG['wednesday']; ?></label>
 					</div>
 					<div>
 						<input type="hidden" name="wd4" value="0">
-						<label><input type="checkbox" name="wd4" <?php echo htmlinput::check(1,$preselectWd4); ?>>Donnerstag</label>
+						<label><input type="checkbox" name="wd4" <?php echo htmlinput::check(1,$preselectWd4); ?>><?php echo LANG['thursday']; ?></label>
 					</div>
 					<div>
 						<input type="hidden" name="wd5" value="0">
-						<label><input type="checkbox" name="wd5" <?php echo htmlinput::check(1,$preselectWd5); ?>>Freitag</label>
+						<label><input type="checkbox" name="wd5" <?php echo htmlinput::check(1,$preselectWd5); ?>><?php echo LANG['friday']; ?></label>
 					</div>
 					<div>
 						<input type="hidden" name="wd6" value="0">
-						<label><input type="checkbox" name="wd6" <?php echo htmlinput::check(1,$preselectWd6); ?>>Samstag</label>
+						<label><input type="checkbox" name="wd6" <?php echo htmlinput::check(1,$preselectWd6); ?>><?php echo LANG['saturday']; ?></label>
 					</div>
 					<div>
 						<input type="hidden" name="wd7" value="0">
-						<label><input type="checkbox" name="wd7" <?php echo htmlinput::check(1,$preselectWd7); ?>>Sonntag</label>
+						<label><input type="checkbox" name="wd7" <?php echo htmlinput::check(1,$preselectWd7); ?>><?php echo LANG['sunday']; ?></label>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<th></th>
-				<td><button><img src='img/ok.svg'>&nbsp;Speichern</button></td>
+				<td><button><img src='img/ok.svg'>&nbsp;<?php echo LANG['save']; ?></button></td>
 			</tr>
 		</table>
 	</form>

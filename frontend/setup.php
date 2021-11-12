@@ -37,7 +37,7 @@ if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['passw
 		header('Location: index.php');
 		die();
 	} else {
-		$info = 'Die Passwörter stimmen nicht überein';
+		$info = LANG['passwords_do_not_match'];
 		$infoclass = 'yellow';
 	}
 }
@@ -46,7 +46,7 @@ if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['passw
 <!DOCTYPE html>
 <html>
 <head>
-	<title>MASTERPLAN</title>
+	<title><?php echo LANG['app_name']; ?></title>
 	<?php require('head.inc.php'); ?>
 </head>
 <body>
@@ -61,9 +61,9 @@ if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['passw
 			<?php } ?>
 			<?php if($schemaExists) { ?>
 			<div class="infobox">
-				Willkommen bei MASTERPLAN!
+				<?php echo LANG['welcome_to_masterplan']; ?>
 				<br>
-				Bitte wählen Sie einen Anmeldenamen und ein Kennwort für den Superadmin-Benutzer.
+				<?php echo LANG['please_choose_username_and_password_for_superadmin_user']; ?>
 			</div>
 			<form method="POST">
 				<input type="text" class="fullwidth" id="txtUsername" name="username" placeholder="Anmeldename">
@@ -73,9 +73,9 @@ if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['passw
 			</form>
 		<?php } else { ?>
 			<div class="infobox">
-				Willkommen bei MASTERPLAN!
+				<?php echo LANG['welcome_to_masterplan']; ?>
 				<br>
-				Bitte importieren Sie das Datenbankschema aus /lib/sql/masterplan.sql und laden Sie die Seite neu.
+				<?php echo LANG['please_import_database_schema']; ?>
 			</div>
 		<?php } ?>
 		</div>

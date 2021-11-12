@@ -5,7 +5,7 @@ $infoclass = null;
 // rights check
 if(!isset($currentUser)) die();
 if($currentUser->superadmin == 0) {
-	die('<div class="infobox red">Sie benötigen Superadmin-Berechtigungen um diese Seite aufzurufen</div>');
+	die('<div class="infobox red">'.LANG['page_superadmin_right_needed'].'</div>');
 }
 
 // create/update
@@ -25,12 +25,12 @@ if(!empty($_POST['title'])) {
 			header('Location: index.php?view=resources');
 			die();
 		} else {
-			$info = "Ressource gespeichert";
-			$infoclass = "green";
+			$info = LANG['resource_saved'];
+			$infoclass = 'green';
 		}
 	} else {
-		$info = "Ressource konnte nicht gespeichert werden: ".$db->getLastStatement()->error;
-		$infoclass = "red";
+		$info = LANG['error'].': '.$db->getLastStatement()->error;
+		$infoclass = 'red';
 	}
 }
 
@@ -45,7 +45,7 @@ $prefillIcon= '';
 $r = null;
 if(isset($_GET['id'])) {
 	$r = $db->getResource($_GET['id']);
-	if($r == null) die('<div class="infobox red">Dienst nicht gefunden</div>');
+	if($r == null) die('<div class="infobox red">'.LANG['not_found'].'</div>');
 	$prefillType = $r->type;
 	$prefillTitle = $r->title;
 	$prefillDescription = $r->description;
@@ -56,9 +56,9 @@ if(isset($_GET['id'])) {
 
 <div class='contentbox small'>
 	<?php if($r == null) { ?>
-		<h2>Neue Ressource</h2>
+		<h2><?php echo LANG['new_resource']; ?></h2>
 	<?php } else { ?>
-		<h2>Ressource bearbeiten</h2>
+		<h2><?php echo LANG['edit_resource']; ?></h2>
 	<?php } ?>
 	<?php if($info != null) { ?>
 		<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
@@ -71,19 +71,19 @@ if(isset($_GET['id'])) {
 
 		<table>
 			<tr>
-				<th>Typ:</th>
+				<th><?php echo LANG['type']; ?>:</th>
 				<td><input type="text" name="type" maxlength="10" autofocus="true" placeholder="Auto, Telefon, Raum, Notebook, ..." value="<?php echo htmlspecialchars($prefillType); ?>"></td>
 			</tr>
 			<tr>
-				<th>Bezeichnung:</th>
+				<th><?php echo LANG['title']; ?>:</th>
 				<td><input type="text" name="title" value="<?php echo htmlspecialchars($prefillTitle); ?>"></td>
 			</tr>
 			<tr>
-				<th>Beschreibung:</th>
-				<td><textarea name="description" placeholder="(optional)"><?php echo htmlspecialchars($prefillDescription); ?></textarea></td>
+				<th><?php echo LANG['description']; ?>:</th>
+				<td><textarea name="description" placeholder="(<?php echo LANG['optional']; ?>)"><?php echo htmlspecialchars($prefillDescription); ?></textarea></td>
 			</tr>
 			<tr>
-				<th>Icon:</th>
+				<th><?php echo LANG['icon']; ?>:</th>
 				<td>
 					<?php
 					$path = 'img/resource_types';
@@ -95,12 +95,12 @@ if(isset($_GET['id'])) {
 				</td>
 			</tr>
 			<tr>
-				<th>Farbe:</th>
+				<th><?php echo LANG['color']; ?>:</th>
 				<td><input type="color" name="color" value="<?php echo htmlspecialchars($prefillColor); ?>"></td>
 			</tr>
 			<tr>
 				<th></th>
-				<td><button><img src='img/ok.svg'>&nbsp;Speichern</button></td>
+				<td><button><img src='img/ok.svg'>&nbsp;<?php echo LANG['save']; ?></button></td>
 			</tr>
 		</table>
 	</form>

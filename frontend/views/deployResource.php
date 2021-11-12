@@ -25,7 +25,7 @@ if(isset($_GET['day'])) {
 if(isset($_GET['service'])) {
 	$service = $db->getService($_GET['service']);
 } else {
-	die('<div class="infobox red">Dienst nicht gefunden</div>');
+	die('<div class="infobox red">'.LANG['service_not_found'].'</div>');
 }
 
 if(isset($_POST['service']) && isset($_POST['day']) && isset($_POST['resource'])) {
@@ -39,24 +39,24 @@ if(isset($_POST['service']) && isset($_POST['day']) && isset($_POST['resource'])
 				echo "<script>self.close()</script>";
 				die();
 			} else {
-				$info = 'Ressource konnte nicht zugeordnet werden: '.$db->getLastStatement()->error;
+				$info = LANG['error'].': '.$db->getLastStatement()->error;
 				$infoclass = 'red';
 			}
 
 		} else {
-			$info = 'Die Ressource "'.htmlspecialchars($db->getResource($_POST['resource'])->title).'" kann nicht für diesen Dienst eingeteilt werden, da sie bereits zur gleichen Zeit für einen anderen Dienst eingetragen ist. Führen Sie den Vorgang erneut aus, um die Einteilung zu erzwingen.';
+			$info = str_replace('%1', htmlspecialchars($db->getResource($_POST['resource'])->title), LANG['resource_already_in_use']);
 			$infoclass = 'yellow';
 			$forceNext = 1;
 		}
 
 	} else {
-		$info = 'Sie besitzen keine Admin-Rechte für diesen Dienstplan';
+		$info = LANG['no_admin_rights_for_this_roster'];
 		$infoclass = 'yellow';
 	}
 }
 ?>
 <div class="contentbox small">
-	<h2>Ressource zuweisen</h2>
+	<h2><?php echo LANG['assign_resource']; ?></h2>
 	<?php if($info != null) { ?>
 		<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
 	<?php } ?>
@@ -67,21 +67,21 @@ if(isset($_POST['service']) && isset($_POST['day']) && isset($_POST['resource'])
 		<?php } ?>
 		<table>
 			<tr>
-				<th>Tag:</th>
+				<th><?php echo LANG['day']; ?>:</th>
 				<td>
 					<input type="hidden" name="day" value="<?php echo htmlspecialchars($day); ?>">
 					<input type="text" disabled="true" value="<?php echo htmlspecialchars( strftime(DATE_FORMAT, strtotime($day)) ); ?>">
 				</td>
 			</tr>
 			<tr>
-				<th>Dienst:</th>
+				<th><?php echo LANG['service']; ?>:</th>
 				<td>
 					<input type="hidden" name="service" value="<?php echo $service->id; ?>">
 					<input type="text" disabled="true" value="<?php echo htmlspecialchars($service->shortname)." ".htmlspecialchars($service->title); ?>">
 				</td>
 			</tr>
 			<tr>
-				<th>Ressource:</th>
+				<th><?php echo LANG['ressource']; ?>:</th>
 				<td>
 					<select name="resource" autofocus="true">
 						<?php
@@ -95,7 +95,7 @@ if(isset($_POST['service']) && isset($_POST['day']) && isset($_POST['resource'])
 			</tr>
 			<tr>
 				<th></th>
-				<td><button><img src='img/ok.svg'>&nbsp;Zuweisen</button></td>
+				<td><button><img src='img/ok.svg'>&nbsp;<?php echo LANG['assign']; ?></button></td>
 			</tr>
 		</table>
 	</form>

@@ -37,7 +37,7 @@ if(isset($_GET['timespan'])) {
 	// flex selection
 	elseif($_GET['timespan'] == 'flex' && isset($_GET['start']) && isset($_GET['end'])) {
 		if(strtotime($_GET['start']) > strtotime($_GET['end'])) {
-			$info = 'Das Enddatum liegt vor dem Startdatum';
+			$info = LANG['end_date_before_start_date'];
 			$infoclass = 'red';
 		} else {
 			$preselectStart = $_GET['start'];
@@ -51,7 +51,7 @@ if(isset($_GET['timespan'])) {
 // may be overwritten by POST data when user executed an action
 if(isset($_POST['start']) && isset($_POST['end'])) {
 	if(strtotime($_POST['start']) > strtotime($_POST['end'])) {
-		$info = 'Das Enddatum liegt vor dem Startdatum';
+		$info = LANG['end_date_before_start_date'];
 		$infoclass = 'red';
 	} else {
 		$preselectStart = $_POST['start'];
@@ -70,8 +70,8 @@ for($i = $dayViewStart; $i <= $dayViewEnd; $i = $i + 86400) {
 if($counter > 31) {
 	$dayViewStart = null;
 	$dayViewEnd = null;
-	$info = "Zeitraum zu groß";
-	$infoclass = "red";
+	$info = LANG['timespan_too_big'];
+	$infoclass = 'red';
 }
 
 $roster = null;
@@ -83,7 +83,7 @@ if(isset($_GET['roster'])) {
 		$preselectRoster = $roster->id;
 		$_SESSION['last_roster'] = $roster->id;
 	} else {
-		$info = 'Sie besitzen keine Leserechte für den angeforderten Dienstplan';
+		$info = LANG['no_read_rights_for_this_roster'];
 		$infoclass = 'yellow';
 	}
 }
@@ -91,7 +91,7 @@ if(isset($_GET['roster'])) {
 if(isset($_POST['action'])) {
 	if($_POST['action'] == 'remove_all_assignments' && $dayViewStart != null && $dayViewEnd != null) {
 		if(!$perm->isUserAdminForRoster($currentUser, $_POST['roster'])) {
-			$info = 'Sie besitzen keine Admin-Rechte für diesen Dienstplan';
+			$info = LANG['no_admin_rights_for_this_roster'];
 			$infoclass = 'red';
 		} else {
 			$success = true;
@@ -102,10 +102,10 @@ if(isset($_POST['action'])) {
 				}
 			}
 			if($success) {
-				$info = 'Dienstzuweisungen wurden entfernt';
+				$info = LANG['service_assignments_removed'];
 				$infoclass = 'green';
 			} else {
-				$info = 'Dienstzuweisungen konnten nicht entfernt werden';
+				$info = LANG['error'].': '.$db->getLastStatement()->error;
 				$infoclass = 'red';
 			}
 		}
@@ -120,14 +120,14 @@ if(isset($_POST['action'])) {
 				}
 			}
 			if(!$error) {
-				$info = 'Dienstplan wurde freigegeben';
+				$info = LANG['roster_released'];
 				$infoclass = 'green';
 			} else {
-				$info = 'Dienstplan konnte nicht freigegeben werden: '.$db->getLastStatement()->error;
+				$info = LANG['error'].': '.$db->getLastStatement()->error;
 				$infoclass = 'red';
 			}
 		} else {
-			$info = 'Sie besitzen keine Admin-Rechte für diesen Dienstplan';
+			$info = LANG['no_admin_rights_for_this_roster'];
 			$infoclass = 'red';
 		}
 	}
@@ -141,21 +141,21 @@ if(isset($_POST['action'])) {
 				}
 			}
 			if(!$error) {
-				$info = 'Dienstplanfreigabe wurde aufgehoben';
+				$info = LANG['roster_release_revoked'];
 				$infoclass = 'green';
 			} else {
-				$info = 'Dienstplanfreigabe konnte nicht aufgehoben werden: '.$db->getLastStatement()->error;
+				$info = LANG['error'].': '.$db->getLastStatement()->error;
 				$infoclass = 'red';
 			}
 		} else {
-			$info = 'Sie besitzen keine Admin-Rechte für diesen Dienstplan';
+			$info = LANG['no_admin_rights_for_this_roster'];
 			$infoclass = 'red';
 		}
 	}
 	elseif($_POST['action'] == 'autoplan_services' && $roster != null && $dayViewStart != null && $dayViewEnd != null) {
 
 		if(!$perm->isUserAdminForRoster($currentUser, $_POST['roster'])) {
-			$info = 'Sie besitzen keine Admin-Rechte für diesen Dienstplan';
+			$info = LANG['no_admin_rights_for_this_roster'];
 			$infoclass = 'red';
 		} else {
 			$aplan = new autoplan($db);
@@ -178,18 +178,18 @@ if(isset($_POST['action'])) {
 							if($db->updatePlannedService(null, $strDay, $s->id, $users[0]['id'])) {
 								$deployedServices ++;
 							} else {
-								$info = 'Benutzer konnte nicht zugeordnet werden: '.$db->getLastStatement()->error;
+								$info = LANG['error'].': '.$db->getLastStatement()->error;
 								$infoclass = 'red';
 							}
 						} else {
-							$info = 'Der Dienstplan konnte aufgrund fehlender Personalressourcen nicht vollständig besetzt werden';
+							$info = LANG['roster_could_not_be_filled_automatically_missing_employees'];
 							$infoclass = 'yellow';
 							break;
 						}
 					}
 				}
 			}
-			$successMsg = $deployedServices.' Dienst(e) wurden automatisch besetzt';
+			$successMsg = str_replace('%1', $deployedServices, LANG['services_filled_automatically']);
 			if($info == null) {
 				$info = $successMsg;
 				$infoclass = 'green';
@@ -201,7 +201,7 @@ if(isset($_POST['action'])) {
 	}
 	elseif($_POST['action'] == 'send_ics_mail' && $dayViewStart != null && $dayViewEnd != null) {
 		if(!$perm->isUserAdminForRoster($currentUser, $_POST['roster'])) {
-			$info = 'Sie besitzen keine Admin-Rechte für diesen Dienstplan';
+			$info = LANG['no_admin_rights_for_this_roster'];
 			$infoclass = 'red';
 		} else {
 
@@ -222,10 +222,10 @@ if(isset($_POST['action'])) {
 				}
 			}
 			if(!$error) {
-				$info = $sentCount.' Termineinladung(en) wurde(n) via E-Mail gesendet';
+				$info = str_replace('%1', $sentCount, LANG['invitations_sent_via_mail']);
 				$infoclass = 'green';
 			} else {
-				$info = 'Termineinladungen konnten nicht gesendet werden: '.$db->getLastStatement()->error;
+				$info = LANG['error'].': '.$db->getLastStatement()->error;
 				$infoclass = 'red';
 			}
 
@@ -246,7 +246,7 @@ function echoPlannedServices($roster_id, $wd, $day) {
 		$extraClassStatusbar = '';
 		if(count($assignments) > $s->employees) $extraClassStatusbar = 'overload';
 		$statusBarPercent = round(count($assignments)*100/$s->employees);
-		$title = htmlspecialchars($s->title) . "\n" . count($assignments)."/".$s->employees." belegt";
+		$title = htmlspecialchars($s->title) . "\n" . count($assignments)."/".$s->employees." ".LANG['assigned'];
 		echo '<div class="service '.$extraClass.'" title="'.$title.'" style="background-color:'.htmlspecialchars($s->color).'">';
 		echo '<div class="statusbar '.$extraClassStatusbar.'" style="width:'.$statusBarPercent.'%"></div>';
 		echo '<div class="title">'.htmlspecialchars($s->shortname).'</div>';
@@ -260,13 +260,13 @@ function echoPlannedServices($roster_id, $wd, $day) {
 			if($a->icsmail_sent != null && $a->icsmail_sent != 0)
 				echo '<img class="icsmail_sent" src="img/email.svg">';
 			if($perm->isUserAdminForRoster($currentUser, $roster_id))
-				echo '<button class="remove" title="Zuweisung entfernen" onclick="removeAssignment('.$a->id.')">&#10005;</button>';
+				echo '<button class="remove" title="'.LANG['remove_assignment'].'" onclick="removeAssignment('.$a->id.')">&#10005;</button>';
 			echo htmlspecialchars($a->user_fullname)
 				.'</div>';
 		}
 		/// service free slots ///
 		for($i=count($assignments); $i<$s->employees; $i++) {
-			echo '<div class="unassigneduser">'.'vakant'.'</div>';
+			echo '<div class="unassigneduser">'.LANG['vacant'].'</div>';
 		}
 		/// assigned resources ///
 		$assignmentsResources = $db->getPlannedServiceResourcesByServiceAndDay($s->id, $day);
@@ -276,7 +276,7 @@ function echoPlannedServices($roster_id, $wd, $day) {
 			echo '<div class="assignedresource '.$extraClass.'" style="background-color:'.htmlspecialchars($r->resource_color).'">';
 			echo '<img class="embleme" src="'.htmlspecialchars($r->resource_icon).'">';
 			if($perm->isUserAdminForRoster($currentUser, $roster_id)) {
-				echo '<button class="remove" title="Zuweisung entfernen" onclick="removeResourceAssignment('.$r->id.')">&#10005;</button>';
+				echo '<button class="remove" title="'.LANG['remove_assignment'].'" onclick="removeResourceAssignment('.$r->id.')">&#10005;</button>';
 			}
 			echo htmlspecialchars($r->resource_title);
 			echo '</div>';
@@ -291,7 +291,7 @@ function echoPlannedServices($roster_id, $wd, $day) {
 					.nl2br(htmlspecialchars(tools::shortText($file->title,10)))
 					.'</a>';
 				if($perm->isUserAdminForRoster($currentUser, $roster_id)) {
-					echo '<button class="remove" title="Datei entfernen" onclick="removeFile('.$file->id.')">&#10005;</button>';
+					echo '<button class="remove" title="'.LANG['remove_file'].'" onclick="removeFile('.$file->id.')">&#10005;</button>';
 				}
 				echo '</div>';
 			}
@@ -303,10 +303,10 @@ function echoPlannedServices($roster_id, $wd, $day) {
 		/// service admin buttons ///
 		if($perm->isUserAdminForRoster($currentUser, $roster_id)) {
 			echo "<div class='servicetoolbar'>";
-			echo "<button title='Mitarbeiter zuweisen' onclick=\"addAssignment('".$s->id."','".htmlspecialchars($day)."')\"><img src=\"img/user.svg\"></button>";
-			echo "<button title='Ressource zuweisen' onclick=\"addResource('".$s->id."','".htmlspecialchars($day)."')\"><img src=\"img/resources.svg\"></button>";
-			echo "<button title='Datei anhängen' onclick=\"addFile('".$s->id."','".htmlspecialchars($day)."')\"><img src=\"img/attach-file.svg\"></button>";
-			echo "<button title='Notiz hinzufügen' onclick=\"addNote('".$s->id."','".htmlspecialchars($day)."')\"><img src=\"img/note.svg\"></button>";
+			echo "<button title='".LANG['assign_employee']."' onclick=\"addAssignment('".$s->id."','".htmlspecialchars($day)."')\"><img src=\"img/user.svg\"></button>";
+			echo "<button title='".LANG['assign_resource']."' onclick=\"addResource('".$s->id."','".htmlspecialchars($day)."')\"><img src=\"img/resources.svg\"></button>";
+			echo "<button title='".LANG['add_file']."' onclick=\"addFile('".$s->id."','".htmlspecialchars($day)."')\"><img src=\"img/attach-file.svg\"></button>";
+			echo "<button title='".LANG['add_note']."' onclick=\"addNote('".$s->id."','".htmlspecialchars($day)."')\"><img src=\"img/note.svg\"></button>";
 			echo "</div>";
 		}
 		echo '</div>';
@@ -381,7 +381,7 @@ function addNote(id, day) {
 	}, 250);
 }
 function removeAssignment(id) {
-	if(confirm('Dienstzuweisung wirklich löschen? Wenn bereits eine Termineinladung versendet wurde, wird automatisch eine Terminabsage gesendet.')) {
+	if(confirm('<?php echo LANG['really_remove_service_assignment']; ?>')) {
 		var body = urlencodeObject({
 			'id' : id,
 			'action' : 'remove_assignment'
@@ -392,7 +392,7 @@ function removeAssignment(id) {
 	}
 }
 function removeResourceAssignment(id) {
-	if(confirm('Ressourcenzuweisung wirklich löschen?')) {
+	if(confirm('<?php echo LANG['really_remove_resource_assignment']; ?>')) {
 		var body = urlencodeObject({
 			'id' : id,
 			'action' : 'remove_resource'
@@ -403,7 +403,7 @@ function removeResourceAssignment(id) {
 	}
 }
 function removeFile(id) {
-	if(confirm('Datei wirklich löschen?')) {
+	if(confirm('<?php echo LANG['really_remove_file']; ?>')) {
 		var body = urlencodeObject({
 			'id' : id,
 			'action' : 'remove_file'
@@ -419,7 +419,7 @@ function disableAllButtons() {
 	}
 }
 function confirmAutoplan() {
-	if(confirm('Automatische Dienstvergabe starten?')) {
+	if(confirm('<?php echo LANG['confirm_start_autoplan']; ?>')) {
 		showPopup();
 		disableAllButtons();
 		return true;
@@ -428,7 +428,7 @@ function confirmAutoplan() {
 	}
 }
 function confirmSendMails() {
-	if(confirm('Termineinladungen jetzt senden?')) {
+	if(confirm('<?php echo LANG['confirm_send_invitations']; ?>')) {
 		showPopup();
 		disableAllButtons();
 		return true;
@@ -445,7 +445,7 @@ function showPopup() {
 	<form method="GET" class="inlineblock">
 		<input type="hidden" name="view" value="plan">
 		<div class="inlineblock">
-			Dienstplan:
+			<?php echo LANG['roster']; ?>:
 			<select name="roster" autofocus="true">
 				<?php foreach($db->getRosters() as $r) {
 					if(!$perm->isUserAdminForRoster($currentUser, $r->id)
@@ -456,15 +456,15 @@ function showPopup() {
 			</select>
 		</div>
 		<div class="inlineblock">
-			<label><input type="radio" name="timespan" value="week" <?php echo ($preselectTimespan=='week' ? 'checked' : ''); ?>>Woche:</input></label>
+			<label><input type="radio" name="timespan" value="week" <?php echo ($preselectTimespan=='week' ? 'checked' : ''); ?>><?php echo LANG['week']; ?>:</input></label>
 			<input type="week" class="small" name="week" value="<?php echo htmlspecialchars($preselectWeek); ?>">
 		</div>
 		<div class="inlineblock">
-			<label><input type="radio" name="timespan" value="flex" <?php echo ($preselectTimespan=='flex' ? 'checked' : ''); ?>>Zeitspanne:</input></label>
+			<label><input type="radio" name="timespan" value="flex" <?php echo ($preselectTimespan=='flex' ? 'checked' : ''); ?>><?php echo LANG['time_span']; ?>:</input></label>
 			<input type="date" class="small" name="start" value="<?php echo htmlspecialchars($preselectStart); ?>">
 			<input type="date" class="small" name="end" value="<?php echo htmlspecialchars($preselectEnd); ?>">
 		</div>
-		<button><img src="img/refresh.svg">&nbsp;Anzeigen</button>
+		<button><img src="img/refresh.svg">&nbsp;<?php echo LANG['show']; ?></button>
 	</form>
 	<?php if($roster != null && $dayViewStart != null && $dayViewEnd != null) { ?>
 	<form method="GET" class="inlineblock">
@@ -472,14 +472,14 @@ function showPopup() {
 		<input type="hidden" name="roster" value="<?php echo $roster->id; ?>">
 		<input type="hidden" name="timespan" value="week">
 		<input type="hidden" name="week" value="<?php echo date('Y').'-W'.date('W'); ?>">
-		<button><img src="img/week-current.svg">&nbsp;Aktuelle Woche</button>
+		<button><img src="img/week-current.svg">&nbsp;<?php echo LANG['current_week']; ?></button>
 	</form>
 	<form method="GET" class="inlineblock">
 		<input type="hidden" name="view" value="plan">
 		<input type="hidden" name="roster" value="<?php echo $roster->id; ?>">
 		<input type="hidden" name="timespan" value="week">
 		<input type="hidden" name="week" value="<?php echo date('Y',strtotime('+1 week')).'-W'.date('W',strtotime('+1 week')); ?>">
-		<button><img src="img/week-next.svg">&nbsp;Kommende Woche</button>
+		<button><img src="img/week-next.svg">&nbsp;<?php echo LANG['next_week']; ?></button>
 	</form>
 	<form method="GET" class="inlineblock">
 		<input type="hidden" name="view" value="plan">
@@ -487,7 +487,7 @@ function showPopup() {
 		<input type="hidden" name="timespan" value="flex">
 		<input type="hidden" name="start" value="<?php echo date('Y-m-01'); ?>">
 		<input type="hidden" name="end" value="<?php echo date('Y-m-t'); ?>">
-		<button><img src="img/month-current.svg">&nbsp;Aktueller Monat</button>
+		<button><img src="img/month-current.svg">&nbsp;<?php echo LANG['current_month']; ?></button>
 	</form>
 	<form method="GET" class="inlineblock">
 		<input type="hidden" name="view" value="plan">
@@ -495,14 +495,14 @@ function showPopup() {
 		<input type="hidden" name="timespan" value="flex">
 		<input type="hidden" name="start" value="<?php echo date('Y-m-01',strtotime('+1 month')); ?>">
 		<input type="hidden" name="end" value="<?php echo date('Y-m-t',strtotime('+1 month')); ?>">
-		<button><img src="img/month-next.svg">&nbsp;Kommender Monat</button>
+		<button><img src="img/month-next.svg">&nbsp;<?php echo LANG['next_month']; ?></button>
 	</form>
 	<?php } ?>
 	<?php if($roster == null || $dayViewStart == null || $dayViewEnd == null) { ?>
 		<?php if($info != null) { ?>
 			<div class="infobox margintop <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
 		<?php } else { ?>
-			<div class="infobox gray margintop">Bitte wählen Sie eine Zeitspanne aus</div>
+			<div class="infobox gray margintop"><?php echo LANG['please_select_timespan']; ?></div>
 		<?php } ?>
 	<?php } ?>
 </div>
@@ -512,49 +512,49 @@ function showPopup() {
 	<h2><?php echo htmlspecialchars($roster->title); ?>, <?php echo htmlspecialchars(strftime(DATE_FORMAT,$dayViewStart)." - ".strftime(DATE_FORMAT,$dayViewEnd)); ?></h2>
 
 	<?php if($perm->isUserAdminForRoster($currentUser, $roster->id)) { ?>
-	<?php if(!$lic->licenseValid) echo "<div class='infobox yellow'>Aufgrund Ihrer ungültigen Lizenz wurden einige Funktionen deaktiviert.</div>"; ?>
+	<?php if(!$lic->licenseValid) echo "<div class='infobox yellow'>".LANG['features_disabled_invalid_license']."</div>"; ?>
 	<div class="toolbar marginbottom">
 		<form method="POST" class="inlineblock" onsubmit="return confirmAutoplan()">
 			<input type="hidden" name="action" value="autoplan_services">
 			<input type="hidden" name="roster" value="<?php echo $roster->id; ?>">
 			<input type="hidden" name="start" value="<?php echo $preselectStart; ?>">
 			<input type="hidden" name="end" value="<?php echo $preselectEnd; ?>">
-			<button title="Freie Dienste automatisch befüllen" <?php if(!$lic->licenseValid) echo " disabled='true'"; ?>><img id="btnAutoplanImg" src="img/flash-auto.svg">&nbsp;Dienste automatisch besetzen</button>
+			<button title="<?php echo LANG['fill_free_services_automatically']; ?>" <?php if(!$lic->licenseValid) echo " disabled='true'"; ?>><img id="btnAutoplanImg" src="img/flash-auto.svg">&nbsp;<?php echo LANG['autoplan_services']; ?></button>
 		</form>
-		<form method="POST" class="inlineblock" onsubmit="return confirm('Möchten Sie wirklich alle zugewiesenen Benutzer entfernen?')">
+		<form method="POST" class="inlineblock" onsubmit="return confirm('<?php echo LANG['really_remove_all_assigned_users']; ?>')">
 			<input type="hidden" name="action" value="remove_all_assignments">
 			<input type="hidden" name="roster" value="<?php echo $roster->id; ?>">
 			<input type="hidden" name="start" value="<?php echo $preselectStart; ?>">
 			<input type="hidden" name="end" value="<?php echo $preselectEnd; ?>">
-			<button <?php if(!$lic->licenseValid) echo " disabled='true'"; ?>><img src="img/cancel.svg">&nbsp;Alle Dienstzuweisungen entfernen</button>
+			<button <?php if(!$lic->licenseValid) echo " disabled='true'"; ?>><img src="img/cancel.svg">&nbsp;<?php echo LANG['remove_all_service_assignments']; ?></button>
 		</form>
-		<form method="POST" class="inlineblock" onsubmit="return confirm('Dienstplan jetzt freigeben?')">
+		<form method="POST" class="inlineblock" onsubmit="return confirm('<?php echo LANG['confirm_release_roster_now']; ?>')">
 			<input type="hidden" name="action" value="release">
 			<input type="hidden" name="roster" value="<?php echo $roster->id; ?>">
 			<input type="hidden" name="start" value="<?php echo $preselectStart; ?>">
 			<input type="hidden" name="end" value="<?php echo $preselectEnd; ?>">
-			<button <?php if(!$lic->licenseValid) echo " disabled='true'"; ?> title="Dienstplan für alle angezeigten Dienste freigeben"><img src="img/check.svg">&nbsp;Dienstplan freigeben</button>
+			<button <?php if(!$lic->licenseValid) echo " disabled='true'"; ?> title="<?php echo LANG['release_roster_description']; ?>"><img src="img/check.svg">&nbsp;<?php echo LANG['release_roster']; ?></button>
 		</form>
-		<form method="POST" class="inlineblock" onsubmit="return confirm('Dienstplanfreigabe wirklich zurücknehmen?')">
+		<form method="POST" class="inlineblock" onsubmit="return confirm('<?php echo LANG['confirm_revoke_release_roster_now']; ?>')">
 			<input type="hidden" name="action" value="remove_release">
 			<input type="hidden" name="roster" value="<?php echo $roster->id; ?>">
 			<input type="hidden" name="start" value="<?php echo $preselectStart; ?>">
 			<input type="hidden" name="end" value="<?php echo $preselectEnd; ?>">
-			<button <?php if(!$lic->licenseValid) echo " disabled='true'"; ?> title="Freigabe für alle angezeigten Dienste zurücknehmen"><img src="img/uncheck.svg">&nbsp;Freigabe zurücknehmen</button>
+			<button <?php if(!$lic->licenseValid) echo " disabled='true'"; ?> title="<?php echo LANG['revoke_release_roster_description']; ?>"><img src="img/uncheck.svg">&nbsp;<?php echo LANG['revoke_release']; ?></button>
 		</form>
 		<form method="POST" class="inlineblock" onsubmit="return confirmSendMails()">
 			<input type="hidden" name="action" value="send_ics_mail">
 			<input type="hidden" name="roster" value="<?php echo $roster->id; ?>">
 			<input type="hidden" name="start" value="<?php echo $preselectStart; ?>">
 			<input type="hidden" name="end" value="<?php echo $preselectEnd; ?>">
-			<button title="Termineinladungen via E-Mail senden" <?php if(!$lic->licenseValid) echo " disabled='true'"; ?>><img id="btnSendMailsImg" src="img/calendar.svg">&nbsp;Termineinladungen senden</button>
+			<button title="<?php echo LANG['send_invitations_description']; ?>" <?php if(!$lic->licenseValid) echo " disabled='true'"; ?>><img id="btnSendMailsImg" src="img/calendar.svg">&nbsp;<?php echo LANG['send_invitations']; ?></button>
 		</form>
 		<form method="GET" class="inlineblock" action="export.php" target="_blank">
 			<input type="hidden" name="export" value="plan">
 			<input type="hidden" name="type" value="pdf">
 			<input type="hidden" name="roster" value="<?php echo $roster->id; ?>">
 			<input type="hidden" name="week" value="<?php echo date('Y',$dayViewStart).'-W'.date('W',$dayViewStart); ?>">
-			<button <?php if(!$lic->licenseValid) echo " disabled='true'"; ?>><img id="btnSendMailsImg" src="img/export.svg">&nbsp;PDF (Wochenansicht)</button>
+			<button <?php if(!$lic->licenseValid) echo " disabled='true'"; ?>><img id="btnSendMailsImg" src="img/export.svg">&nbsp;<?php echo LANG['pdf_week_view']; ?></button>
 		</form>
 	</div>
 	<?php } ?>
@@ -583,7 +583,7 @@ function showPopup() {
 			<?php foreach($part as $i) { ?>
 				<th class="<?php if(date('Y-m-d')==date('Y-m-d',$i)) echo 'mark'; ?>">
 					<?php echo strftime('%A', $i); ?>
-					<?php if(count($db->getReleasedPlansByRosterAndDay($roster->id, date('Y-m-d', $i))) > 0) echo '<img class="released" title="freigegeben" src="img/check.svg">'; ?>
+					<?php if(count($db->getReleasedPlansByRosterAndDay($roster->id, date('Y-m-d', $i))) > 0) echo '<img class="released" title="'.LANG['released'].'" src="img/check.svg">'; ?>
 				</th>
 			<?php } ?>
 		</tr>
@@ -613,13 +613,13 @@ function showPopup() {
 			<p>
 				<img src="img/loader.svg">
 				<br>
-				<b>Bitte warten...</b>
+				<b><?php echo LANG['please_wait']; ?></b>
 			</p>
 			<p>
-				Je nach Anzahl der zu planenden Tage, Dienste und Mitarbeiter kann dieser Vorgang mehrere Minuten dauern.
+				<?php echo LANG['autoplan_in_progress_description']; ?>
 			</p>
 			<p class="hint">
-				Es wird empfohlen immer nur eine Woche automatisch zu planen.
+				<?php echo LANG['autoplan_in_progress_description2']; ?>
 			</p>
 		</div>
 	</div>

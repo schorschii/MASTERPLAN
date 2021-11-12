@@ -12,15 +12,15 @@ class browser {
 	private function checkBrowser() {
 		if($this->isInternetExplorer()) {
 			$this->valid = false;
-			$this->message = 'Ihr Browser wird nicht unterstützt. Bitte verwenden Sie einen Chromium-basierten Webbrowser.';
+			$this->message = LANG['browser_not_supported'];
 		}
 		elseif($this->isFirefox()) {
 			$this->valid = false;
-			$this->message = 'Ihr Browser wird nicht unterstützt, da er keine Wochen-Auswahlfelder unterstützt. Bitte verwenden Sie einen Chromium-basierten Webbrowser.';
+			$this->message = LANG['browser_not_supported_calendar_field'];
 		}
 		elseif($this->isSafari()) {
 			$this->valid = false;
-			$this->message = 'Ihr Browser wird nicht unterstützt, da er keine Wochen-Auswahlfelder unterstützt. Bitte verwenden Sie einen Chromium-basierten Webbrowser.';
+			$this->message = LANG['browser_not_supported_calendar_field'];
 		}
 		else {
 			$this->valid = true;

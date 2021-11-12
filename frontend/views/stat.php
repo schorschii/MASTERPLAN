@@ -5,7 +5,7 @@ $infoclass = null;
 // rights check
 if(!isset($currentUser)) die();
 if($currentUser->superadmin == 0) {
-	die('<div class="infobox red">Sie benötigen Superadmin-Berechtigungen um diese Seite aufzurufen</div>');
+	die('<div class="infobox red">'.LANG['page_superadmin_right_needed'].'</div>');
 }
 
 $preselectUser = null;
@@ -21,11 +21,11 @@ if(isset($_GET['end_month']))
 ?>
 
 <div class="contentbox">
-	<h2>Auswertung / Statistik</h2>
+	<h2><?php echo LANG['analysis_statistic']; ?></h2>
 	<form method="GET">
 		<input type="hidden" name="view" value="stat">
 		<div class="inlineblock">
-			Mitarbeiter:
+			<?php echo LANG['employee']; ?>:
 			<select name="user">
 				<?php
 				foreach($db->getRosters() as $r) {
@@ -40,14 +40,14 @@ if(isset($_GET['end_month']))
 			</select>
 		</div>
 		<div class="inlineblock">
-			Von:
+			<?php echo LANG['start']; ?>:
 			<input type="month" id="month1" name="start_month" value="<?php echo htmlspecialchars($prefillStartMonth); ?>">
 		</div>
 		<div class="inlineblock">
-			Bis:
+			<?php echo LANG['end']; ?>:
 			<input type="month" id="month2" name="end_month" value="<?php echo htmlspecialchars($prefillEndMonth); ?>">
 		</div>
-		<button><img src="img/refresh.svg">&nbsp;Anzeigen</button>
+		<button><img src="img/refresh.svg">&nbsp;<?php echo LANG['show']; ?></button>
 	</form>
 </div>
 
@@ -55,7 +55,7 @@ if(isset($_GET['end_month']))
 if(isset($_GET['user']) && isset($_GET['start_month']) && isset($_GET['end_month'])) {
 
 $u = $db->getUser($_GET['user']);
-if($u == null) die('<div class="infobox error">Benutzer nicht gefunden</div>');
+if($u == null) die('<div class="infobox error">'.LANG['not_found'].'</div>');
 
 $aplan = new autoplan($db);
 
@@ -120,8 +120,8 @@ $plot->SetFontTTF('y_label', '../lib/phplot/fonts/Khula-Light.ttf', 12);
 $plot->SetPlotType('lines');
 $plot->SetDataValues($graphdata);
 
-$plot->SetTitle("Auslastung ".$u->fullname);
-$plot->SetLegend(array('Stunden','Max. Std.'));
+$plot->SetTitle(LANG['utilization'].' '.$u->fullname);
+$plot->SetLegend(array(LANG['hours'], LANG['max_hrs']));
 
 #$plot->SetPlotAreaWorld(NULL, 0, NULL, 100);
 $plot->SetXTickLabelPos('none'); $plot->SetXTickPos('none');
@@ -133,10 +133,10 @@ $plot->SetPrintImage(false); $plot->DrawGraph();
 <div class="contentbox">
 	<table class="data plan timetable">
 		<tr>
-			<th>Zeitraum</th>
-			<th>Dienste</th>
-			<th>Stunden</th>
-			<th>Max. Std. / Monat</th>
+			<th><?php echo LANG['time_span']; ?></th>
+			<th><?php echo LANG['services']; ?></th>
+			<th><?php echo LANG['hours']; ?></th>
+			<th><?php echo LANG['max_hrs_month']; ?></th>
 		</tr>
 		<?php foreach($data as $d) { ?>
 			<tr class="topborder">
@@ -147,7 +147,7 @@ $plot->SetPrintImage(false); $plot->DrawGraph();
 			</tr>
 		<?php } ?>
 		<tr>
-			<th>Summe</th>
+			<th><?php echo LANG['total']; ?></th>
 			<td><?php echo $sumServices; ?></td>
 			<td><?php echo $sumHours; ?></td>
 			<td><?php echo $sumMaxHoursPerMonth; ?></td>

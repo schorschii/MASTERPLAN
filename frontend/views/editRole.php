@@ -5,7 +5,7 @@ $infoclass = null;
 // rights check
 if(!isset($currentUser)) die();
 if($currentUser->superadmin == 0) {
-	die('<div class="infobox red">Sie benötigen Superadmin-Berechtigungen um diese Seite aufzurufen</div>');
+	die('<div class="infobox red">'.LANG['page_superadmin_right_needed'].'</div>');
 }
 
 if(!empty($_POST['title'])) {
@@ -56,15 +56,15 @@ if(!empty($_POST['title'])) {
 		$db->commitTransaction();
 
 		if($error) {
-			$info = "Rolle konnte nicht gespeichert werden: ".$db->getLastStatement()->error;
-			$infoclass = "red";
+			$info = LANG['error'].': '.$db->getLastStatement()->error;
+			$infoclass = 'red';
 		} else {
 			if(isset($_POST['id'])) {
 				header('Location: index.php?view=roles');
 				die();
 			} else {
-				$info = "Rolle gespeichert";
-				$infoclass = "green";
+				$info = LANG['role_saved'];
+				$infoclass = 'green';
 			}
 		}
 }
@@ -89,7 +89,7 @@ if(isset($_GET['id'])) {
 ?>
 
 <div class='contentbox small'>
-	<h2>Rolleneinstellungen</h2>
+	<h2><?php echo LANG['role_settings']; ?></h2>
 	<?php if($info != null) { ?>
 		<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
 	<?php } ?>
@@ -100,30 +100,30 @@ if(isset($_GET['id'])) {
 		<?php } ?>
 		<table class="input">
 			<tr>
-				<th>Rollenbezeichnung:</th>
+				<th><?php echo LANG['title']; ?>:</th>
 				<td><input type="text" name="title" autofocus="true" value="<?php echo htmlspecialchars($prefillTitle); ?>"></td>
 			</tr>
 			<tr>
-				<th>Max. Std./Tag:</th>
+				<th><?php echo LANG['max_hrs_day']; ?>:</th>
 				<td><input type="number" name="max_hours_per_day" value="<?php echo $prefillMaxHoursPerDay; ?>"></td>
 			</tr>
 			<tr>
-				<th>Max. Dienste/Woche:</th>
+				<th><?php echo LANG['max_services_week']; ?>:</th>
 				<td><input type="number" name="max_services_per_week" value="<?php echo $prefillMaxServicesPerWeek; ?>"></td>
 			</tr>
 			<tr>
-				<th>Max. Std./Woche:</th>
+				<th><?php echo LANG['max_hrs_week']; ?>:</th>
 				<td><input type="number" name="max_hours_per_week" value="<?php echo $prefillMaxHoursPerWeek; ?>"></td>
 			</tr>
 			<tr>
-				<th>Max. Std./Monat:</th>
+				<th><?php echo LANG['max_hrs_month']; ?>:</th>
 				<td><input type="number" name="max_hours_per_month" value="<?php echo $prefillMaxHoursPerMonth; ?>"></td>
 			</tr>
 			<tr>
 				<th>
-					Zugeteilte Benutzer:
+					<?php echo LANG['assigned_users']; ?>:
 					<div class="hint">
-						<div>Wählen Sie die Benutzer aus, die die Einstellungen dieser Rolle bekommen sollen.</div>
+						<div><?php echo LANG['assigned_users_description']; ?></div>
 					</div>
 				</th>
 				<td>
@@ -144,7 +144,7 @@ if(isset($_GET['id'])) {
 			</tr>
 			<tr>
 				<th></th>
-				<td><button class="fullwidth" title="Rolle Döner - Bester Döner!"><img src='img/ok.svg'>&nbsp;Rolle speichern</button></td>
+				<td><button class="fullwidth" title="Rolle Döner - Bester Döner!"><img src='img/ok.svg'>&nbsp;<?php echo LANG['save']; ?></button></td>
 			</tr>
 		</table>
 	</form>

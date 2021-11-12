@@ -35,7 +35,7 @@ class genpdf {
 
 		$roster = $this->dbhandle->getRoster($roster_id);
 
-		$title = 'Dienstplan '.$roster->title.' Woche '.date('W', strtotime($strWeek));
+		$title = LANG['roster'].' '.$roster->title.' '.LANG['week'].' '.date('W', strtotime($strWeek));
 
 		$pdf = new fpdf('L','mm','A4');
 		$pdf->SetTitle($title);
@@ -163,9 +163,9 @@ class genpdf {
 		$roster = $this->dbhandle->getRoster($roster_id);
 
 		if($roster_id == -1) {
-			$title = 'Alle Mitarbeiter, Woche '.date('W', strtotime($strWeek));
+			$title = LANG['all_employees'].', '.LANG['week'].' '.date('W', strtotime($strWeek));
 		} else {
-			$title = 'Mitarbeiter '.$roster->title.', Woche '.date('W', strtotime($strWeek));
+			$title = LANG['employee'].' '.$roster->title.', '.LANG['week'].' '.date('W', strtotime($strWeek));
 		}
 
 		$pdf = new fpdf('L','mm','A4');
@@ -323,9 +323,9 @@ class genpdf {
 		$roster = $this->dbhandle->getRoster($roster_id);
 
 		if($roster_id == -1) {
-			$title = 'Freie Mitarbeiter, Woche '.date('W', strtotime($strWeek));
+			$title = LANG['available_employees'].', '.LANG['week'].' '.date('W', strtotime($strWeek));
 		} else {
-			$title = 'Freie Mitarbeiter '.$roster->title.', Woche '.date('W', strtotime($strWeek));
+			$title = LANG['available_employees'].' '.$roster->title.', '.LANG['week'].' '.date('W', strtotime($strWeek));
 		}
 
 		$pdf = new fpdf('L','mm','A4');
@@ -446,7 +446,7 @@ class genpdf {
 	public function createAbsencePdf($user_id) {
 		$user = $this->dbhandle->getUser($user_id);
 
-		$title = 'Abwesenheiten '.$user->fullname;
+		$title = LANG['absences'].' '.$user->fullname;
 
 		$pdf = new fpdf('L','mm','A4');
 		$pdf->SetTitle($title);
@@ -471,10 +471,10 @@ class genpdf {
 		$w = ($pdf->GetPageWidth()-16)/4;
 
 		$pdf->ln();
-		$pdf->Cell($w,$this->h1,utf8_decode('Kürzel'),1,0,'C',true);
-		$pdf->Cell($w,$this->h1,utf8_decode('Beginn'),1,0,'C',true);
-		$pdf->Cell($w,$this->h1,utf8_decode('Ende'),1,0,'C',true);
-		$pdf->Cell($w,$this->h1,utf8_decode('Best./Genehmigt'),1,0,'C',true);
+		$pdf->Cell($w,$this->h1,utf8_decode(LANG['short_name']),1,0,'C',true);
+		$pdf->Cell($w,$this->h1,utf8_decode(LANG['begin']),1,0,'C',true);
+		$pdf->Cell($w,$this->h1,utf8_decode(LANG['end']),1,0,'C',true);
+		$pdf->Cell($w,$this->h1,utf8_decode(LANG['confirmed_approved']),1,0,'C',true);
 
 		$pdf->SetFillColor(255,255,255);
 
@@ -491,7 +491,7 @@ class genpdf {
 			$pdf->Cell($w,$this->h1,utf8_decode($a->absent_type_shortname),1,0,'C',true);
 			$pdf->Cell($w,$this->h1,utf8_decode(strftime(DATE_FORMAT, strtotime($a->start))),1,0,'C',true);
 			$pdf->Cell($w,$this->h1,utf8_decode(strftime(DATE_FORMAT, strtotime($a->end))),1,0,'C',true);
-			$pdf->Cell($w,$this->h1,utf8_decode( ($approved ? 'Ja' : 'Nein').htmlspecialchars($approved_user_text) ),1,0,'C',true);
+			$pdf->Cell($w,$this->h1,utf8_decode( ($approved ? LANG['yes'] : LANG['no']).htmlspecialchars($approved_user_text) ),1,0,'C',true);
 			if(!empty($a->comment)) {
 				$pdf->ln();
 				$pdf->Cell($w*4,$this->h1,utf8_decode($a->comment),1,0,'C',true);

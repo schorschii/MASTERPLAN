@@ -5,7 +5,7 @@ $infoclass = null;
 // rights check
 if(!isset($currentUser)) die();
 if($currentUser->superadmin == 0) {
-	die('<div class="infobox red">Sie benötigen Superadmin-Berechtigungen um diese Seite aufzurufen</div>');
+	die('<div class="infobox red">'.LANG['page_superadmin_right_needed'].'</div>');
 }
 
 $user = null;
@@ -14,7 +14,7 @@ if(isset($_POST['user'])) {
 }
 
 if($user == null) {
-	die('<div class="infobox red">Benutzer nicht gefunden</div>');
+	die('<div class="infobox red">'.LANG['not_found'].'</div>');
 }
 
 if(!empty($_POST['action'])) {
@@ -27,8 +27,8 @@ if(!empty($_POST['action'])) {
 			&& $_POST['wd5'] == '0'
 			&& $_POST['wd6'] == '0'
 			&& $_POST['wd7'] == '0') {
-				$info = "Beschränkung nicht gespeichert: Sie müssen mindestens einen Wochentag auswählen, sonst ist die Beschränkung nutzlos.";
-				$infoclass = "yellow";
+				$info = LANG['constraint_no_weekday_selected'];
+				$infoclass = 'yellow';
 			} elseif($db->updateUserConstraint(
 				null,
 				$user->id,
@@ -42,27 +42,27 @@ if(!empty($_POST['action'])) {
 				$_POST['wd7'],
 				$_POST['comment']
 			)) {
-				$info = "Beschränkung gespeichert";
-				$infoclass = "green";
+				$info = LANG['constraint_saved'];
+				$infoclass = 'green';
 			} else {
-				$info = "Beschränkung konnte nicht gespeichert werden: ".$db->getLastStatement()->error;
-				$infoclass = "red";
+				$info = LANG['error'].': '.$db->getLastStatement()->error;
+				$infoclass = 'red';
 			}
 		}
 	}
 	elseif($_POST['action'] == 'removeUserConstraint') {
 		if($db->removeUserConstraint($_POST['id'])) {
-			$info = "Beschränkung entfernt";
-			$infoclass = "green";
+			$info = LANG['constraint_removed'];
+			$infoclass = 'green';
 		} else {
-			$info = "Beschränkung konnte nicht entfernt werden";
-			$infoclass = "green";
+			$info = LANG['error'].': '.$db->getLastStatement()->error;
+			$infoclass = 'red';
 		}
 	}
 }
 ?>
 <div class="contentbox small">
-	<h2>Beschränkung hinzufügen</h2>
+	<h2><?php echo LANG['add_constraint']; ?></h2>
 
 	<?php if($info != null) { ?>
 		<div class="infobox <?php echo $infoclass; ?>"><?php echo htmlspecialchars($info); ?></div>
@@ -74,40 +74,40 @@ if(!empty($_POST['action'])) {
 		<input type='hidden' name='action' value='addUserConstraint'>
 		<input type="hidden" name="user" value="<?php echo $user->id; ?>">
 		<div class="margintop">
-			Dieser Mitarbeiter darf am:
+			<?php echo LANG['this_employee_should_not_be_deployed_on']; ?>:
 			<div>
 				<label>
 					<input type="hidden" name="wd1" value="0">
-					<input type="checkbox" name="wd1" value="1">Mo
+					<input type="checkbox" name="wd1" value="1"><?php echo LANG['monday_short']; ?>
 				</label>
 				<label>
 					<input type="hidden" name="wd2" value="0">
-					<input type="checkbox" name="wd2" value="1">Di
+					<input type="checkbox" name="wd2" value="1"><?php echo LANG['tuesday_short']; ?>
 				</label>
 				<label>
 					<input type="hidden" name="wd3" value="0">
-					<input type="checkbox" name="wd3" value="1">Mi
+					<input type="checkbox" name="wd3" value="1"><?php echo LANG['wednesday_short']; ?>
 				</label>
 				<label>
 					<input type="hidden" name="wd4" value="0">
-					<input type="checkbox" name="wd4" value="1">Do
+					<input type="checkbox" name="wd4" value="1"><?php echo LANG['thursday_short']; ?>
 				</label>
 				<label>
 					<input type="hidden" name="wd5" value="0">
-					<input type="checkbox" name="wd5" value="1">Fr
+					<input type="checkbox" name="wd5" value="1"><?php echo LANG['friday_short']; ?>
 				</label>
 				<label>
 					<input type="hidden" name="wd6" value="0">
-					<input type="checkbox" name="wd6" value="1">Sa
+					<input type="checkbox" name="wd6" value="1"><?php echo LANG['saturday_short']; ?>
 				</label>
 				<label>
 					<input type="hidden" name="wd7" value="0">
-					<input type="checkbox" name="wd7" value="1">So
+					<input type="checkbox" name="wd7" value="1"><?php echo LANG['sunday_short']; ?>
 				</label>
 			</div>
 		</div>
 		<div class="margintop">
-			nicht für:
+			<?php echo LANG['this_employee_should_not_be_deployed_for']; ?>:
 			<select name="service">
 				<option value="0">ALLE DIENSTE</option>
 				<?php
@@ -122,32 +122,32 @@ if(!empty($_POST['action'])) {
 			</select>
 		</div>
 		<div class="margintop">
-			eingesetzt werden.
+			<?php echo LANG['this_employee_should_not_be_deployed_end']; ?>:
 		</div>
 		<div class="margintop">
-			<input class="fullwidth" type="text" name="comment" placeholder="Kommentar zu dieser Beschränkung (optional)">
+			<input class="fullwidth" type="text" name="comment" placeholder="<?php echo LANG['comment_for_this_constraint_optional']; ?>">
 		</div>
 
 		<div class="margintop">
-			<button class="fullwidth"><img src='img/ok.svg'>&nbsp;Speichern</button>
+			<button class="fullwidth"><img src='img/ok.svg'>&nbsp;<?php echo LANG['save']; ?></button>
 		</div>
 	</form>
 </div>
 
 <div class="contentbox small">
-		<h2>Aktive Beschränkungen</h2>
+		<h2><?php echo LANG['active_constraints']; ?></h2>
 		<?php
 		$constraints = $db->getUserConstraints($user->id);
 		if(sizeof($constraints) == 0) {
-			echo "<div class='infobox'>Keine Beschränkungen definiert</div>";
+			echo "<div class='infobox'>".LANG['no_constraints_defined']."</div>";
 		} else {
 			echo "<table class='data'>"
-				."<tr><th>Dienst</th><th>Mo</th><th>Di</th><th>Mi</th><th>Do</th><th>Fr</th><th>Sa</th><th>So</th><th>Aktion</th></tr>";
+				."<tr><th>".LANG['service']."</th><th>".LANG['monday_short']."</th><th>".LANG['tuesday_short']."</th><th>".LANG['wednesday_short']."</th><th>".LANG['thursday_short']."</th><th>".LANG['friday_short']."</th><th>".LANG['saturday_short']."</th><th>".LANG['sunday_short']."</th><th>".LANG['action']."</th></tr>";
 			foreach($constraints as $c) {
 				echo "<tr>"
 					."<td>"
 					.(($c->comment=='') ? "" : "<img src='img/info-gray.svg' title='".htmlspecialchars($c->comment)."'>&nbsp;")
-					.($c->shortname==null ? "ALLE DIENSTE" : htmlspecialchars($c->shortname))
+					.($c->shortname==null ? LANG['all_services'] : htmlspecialchars($c->shortname))
 					."</td>"
 					."<td class='wrapcontent center'>".($c->wd1 ? "&#10005;" : "")."</td>"
 					."<td class='wrapcontent center'>".($c->wd2 ? "&#10005;" : "")."</td>"
@@ -157,11 +157,11 @@ if(!empty($_POST['action'])) {
 					."<td class='wrapcontent center'>".($c->wd6 ? "&#10005;" : "")."</td>"
 					."<td class='wrapcontent center'>".($c->wd7 ? "&#10005;" : "")."</td>"
 					."<td class='wrapcontent'>"
-					. "<form method='POST' onsubmit='return confirm(\"Beschränkung wirklich entfernen?\")'>"
+					. "<form method='POST' onsubmit='return confirm(\"".LANG['really_remove_constraint']."\")'>"
 					. "<input type='hidden' name='action' value='removeUserConstraint'>"
 					. "<input type='hidden' name='user' value='".$user->id."'>"
 					. "<input type='hidden' name='id' value='".$c->id."'>"
-					. "<button title='Entfernen'><img src='img/delete.svg'></button>"
+					. "<button title='".LANG['remove']."'><img src='img/delete.svg'></button>"
 					. "</form>"
 					."</td>"
 					."</tr>";
