@@ -11,7 +11,7 @@ bf8db1b223db866e960eb3569d928cd7  genpdf.php
 164c44d88be637c6ad81264f5e7630fe  htmlinput.php
 7890a4cc38540601ea01b2ab9929c3a1  lang.php
 695e78b4c9fa9d52385cfbcd2b7b1fd9  ldapsync.php
-37c32398b1b632353bd76b724bfc291a  license.php
+ae2316db815f9b369dd1679441d2a8e6  license.php
 5363110b97e8aa027a6898439278f4ee  loader.php
 40f148a6c62ebf9aae18babf86c77460  mailer.php
 e012691bfad7cdd3e6d1968e533f24a1  permissions.php
