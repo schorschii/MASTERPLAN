@@ -49,7 +49,7 @@ The following web browsers are explicitly **not** supported at the moment.
    service apache2 restart
    ```
 3. Create a database on your database server and import the database schema from `lib/sql/masterplan.sql` (e.g. via PHPmyadmin or the command line tool `mysql`).
-4. Copy all files to your web server root directory (e.g. `/var/www/masterplan`).
+4. Copy all files from the [latest release](https://github.com/schorschii/masterplan/releases/latest) to your web server root directory (e.g. `/var/www/masterplan`).
 5. Edit the MASTERPLAN configuration file `conf.php`.
    1. Enter your access data for the database server (fill in the constants: `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`).
    2. *(optional)* If you want to use the LDAP-Sync, please fill in the following constants accordingly: `LDAP_SERVER`, `LDAP_USER`, `LDAP_DOMAIN`, `LDAP_PASS`, `LDAP_QUERY_ROOT`, `LDAP_SYNC_GROUP`.

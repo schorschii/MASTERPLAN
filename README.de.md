@@ -49,7 +49,7 @@ Folgende Webbrowser werden im Moment explizit **nicht** unterstützt.
    service apache2 restart
    ```
 3. Legen Sie eine Datenbank auf Ihrem Datenbank-Server an und importieren Sie das Datenbankschema aus `lib/sql/masterplan.sql` (z.B. über PHPmyadmin oder das Kommandozeilenwerkzeug `mysql`).
-4. Kopieren Sie alle Dateien in Ihr Webserver-Wurzelverzeichnis (z.B. `/var/www/masterplan`).
+4. Kopieren Sie alle Dateien des [neusten Releases](https://github.com/schorschii/masterplan/releases/latest) in Ihr Webserver-Wurzelverzeichnis (z.B. `/var/www/masterplan`).
 5. Editieren Sie die MASTERPLAN-Konfigurationsdatei `conf.php`.
    1. Tragen Sie Ihre Zugangsdaten zum Datenbankserver ein (befüllen Sie die Konstanten: `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`).
    2. *(optional)* Wenn Sie den LDAP-Sync verwenden möchten, befüllen Sie bitte die folgenden Konstanten entsprechend: `LDAP_SERVER`, `LDAP_USER`, `LDAP_DOMAIN`, `LDAP_PASS`, `LDAP_QUERY_ROOT`, `LDAP_SYNC_GROUP`.
