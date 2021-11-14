@@ -13,6 +13,16 @@
 - Integration in Ihr Corporate Design (CD) möglich.
 - Programm-Anpassungen an Ihre Bedürfnisse auf Angebotsbasis möglich - wenn Sie eine Funktion vermissen nehmen Sie einfach Kontakt auf.
 
+## Screenshots
+![Plan ausgefüllt](.github/screenshots/2planfilled.png)  
+![Mitarbeiterübersicht](.github/screenshots/2useroverview.png)  
+![Dienste](.github/screenshots/1services.png)  
+![Geburtstage](.github/screenshots/1birthdays.png)  
+![Beschränkungen](.github/screenshots/1userconstraints.png)  
+![Abwesenheiten](.github/screenshots/3absence.png)  
+![Meine Dienste](.github/screenshots/3myservices.png)  
+![Diensttausch](.github/screenshots/3swap.png)  
+
 ## Systemanforderungen
 ### Client
 Folgende Webbrowser werden unterstützt, sofern JavaScript aktiviert ist.
@@ -37,6 +47,9 @@ Folgende Webbrowser werden im Moment explizit **nicht** unterstützt.
 - Betriebssystem: beliebige Linux-Distribution, Empfehlung: Debian
 - Webserver: Apache 2 + PHP 7 (oder neuer) mit Modulen: LDAP, GD
 - Datenbanksystem: MySQL oder MariaDB
+
+## Konfiguration & Verwendung
+Bitte lesen Sie hierzu das PDF-Handbuch im Ordner `frontend/manual`.
 
 ## Schnellinstallationsanleitung
 1. Installieren Sie einen Linux-Server gemäß den Systemanforderungen (inkl. Apache, PHP, MySQL).
@@ -65,28 +78,16 @@ Folgende Webbrowser werden im Moment explizit **nicht** unterstützt.
 10. Richten Sie HTTPS auf Ihrem Webserver ein, damit die Clients über einen verschlüsselten Kanal auf MASTERPLAN zugreifen können. Hinweise zum Apache SSL-Modul finden Sie z.B. unter: https://wiki.ubuntuusers.de/Apache/mod_ssl/
 11. Richten Sie ein Backup für die Datenbank ein. Hinweise für eine Datenbanksicherung finden Sie z.B. hier: https://wiki.ubuntuusers.de/MySQL/Backup/
 
-## Konfiguration & Verwendung
-Bitte lesen Sie hierzu das PDF-Handbuch im Ordner `frontend/manual`.
-
 ## Upgrade auf eine neuere Version
 Bitte lesen Sie die [Upgrade Notes](UPGRADE.md).
 
 ## Lizenzierung
 Sie können MASTERPLAN mit bis zu 5 Benutzern kostenfrei verwenden (Spenden zur Weiterentwicklung sind gerne gesehen). Für mehr als 5 Benutzer ist eine Lizenz notwendig, welche Sie [hier](https://georg-sieber.de/?page=masterplan) erwerben können. Bei Fragen nehmen Sie bitte [Kontakt auf](https://georg-sieber.de/?page=impressum).
 
-## Übersetzungen & Verbesserungen Willkommen!
+## Übersetzungen & Verbesserungen sind willkommen!
 Bitte eröffnen Sie einen Pull-Request wenn Sie die Software verbessern möchten!
+
+Für Übersetzer: die Sprachdateien befinden sich in `lib/lang/<langcode>.php`. Sie können dort neue Dateien mit Ihren Übersetzungen einfügen oder Bestehende korrigieren. Vielen Dank!
 
 ## Support & Cloud-Hosting
 Sie haben keinen eigenen Webserver, benötigen Unterstützung bei Installation oder Betrieb oder wünschen eine spezielle Anpassung für Ihr Unternehmen? Kein Problem. Sie können einen bereitgestellten Zugang für eine monatliche Gebühr pro Mitarbeiter nutzen, den E-Mail-Support in Anspruch nehmen oder Angebote zur Weiterentwicklung der Software erhalten. Bitte [kontaktieren Sie mich](https://georg-sieber.de/?page=impressum).
-
-## Screenshots
-![Plan](.github/screenshots/2plan.png)  
-![Plan ausgefüllt](.github/screenshots/2planfilled.png)  
-![Mitarbeiterübersicht](.github/screenshots/2useroverview.png)  
-![Dienste](.github/screenshots/1services.png)  
-![Geburtstage](.github/screenshots/1birthdays.png)  
-![Beschränkungen](.github/screenshots/1userconstraints.png)  
-![Abwesenheiten](.github/screenshots/3absence.png)  
-![Meine Dienste](.github/screenshots/3myservices.png)  
-![Diensttausch](.github/screenshots/3swap.png)  

@@ -13,6 +13,16 @@
 - Integration into your corporate design (CD) possible.
 - Program adjustments to your needs are possible on an offer basis - if you miss a function, simply contact me.
 
+## Screenshots
+![Plan Filled](.github/screenshots/2planfilled.png)  
+![Employee Overview](.github/screenshots/2useroverview.png)  
+![Services](.github/screenshots/1services.png)  
+![Birthdays](.github/screenshots/1birthdays.png)  
+![Constraints](.github/screenshots/1userconstraints.png)  
+![Absences](.github/screenshots/3absence.png)  
+![My Services](.github/screenshots/3myservices.png)  
+![Service Swap](.github/screenshots/3swap.png)  
+
 ## System Requirements
 ### Client
 The following web browsers are supported (JavaScript is mandatory).
@@ -37,6 +47,9 @@ The following web browsers are explicitly **not** supported at the moment.
 - Operating system: any Linux distribution, recommendation: Debian
 - Web server: Apache 2 + PHP 7 (or newer) with modules: LDAP, GD
 - Database system: MySQL or MariaDB
+
+## Configuration & Usage
+Please read the user manual inside `frontend/manual` (currently only available in German).
 
 ## Quick Installation Guide
 1. Install a Linux server according to the system requirements (incl. Apache, PHP, MySQL).
@@ -65,9 +78,6 @@ The following web browsers are explicitly **not** supported at the moment.
 10. Set up HTTPS on your web server so that the clients can access MASTERPLAN via an encrypted channel. You can find information on the Apache SSL module at: https://wiki.ubuntuusers.de/Apache/mod_ssl/
 11. Set up a backup for the database. You can find information about a database backup here: https://wiki.ubuntuusers.de/MySQL/Backup/
 
-## Configuration & Usage
-Please read the user manual inside `frontend/manual`.
-
 ## Upgrade to a newer version
 Please read the [upgrade notes](UPGRADE.md).
 
@@ -77,16 +87,7 @@ You can use MASTERPLAN with up to 5 users free of charge (donations for further 
 ## Translations & Contributions Welcome!
 Please open a pull request for any improvements you like!
 
+For translators: the language files are in `lib/lang/<langcode>.php`. There you can insert new files with your translations or correct existing ones. Thank you very much!
+
 ## Support & Cloud-Hosting
 You do not have an own web server, you need support with installation or operation or want a special development for your company? No problem. You can use an cloud-hosted installation provided for a monthly fee per employee, use the e-mail support or receive offers for further development of the software. Please [contact me](https://georg-sieber.de/?page=impressum).
-
-## Screenshots
-![Plan](.github/screenshots/2plan.png)  
-![Plan Filled](.github/screenshots/2planfilled.png)  
-![Employee Overview](.github/screenshots/2useroverview.png)  
-![Services](.github/screenshots/1services.png)  
-![Birthdays](.github/screenshots/1birthdays.png)  
-![Constraints](.github/screenshots/1userconstraints.png)  
-![Absences](.github/screenshots/3absence.png)  
-![My Services](.github/screenshots/3myservices.png)  
-![Service Swap](.github/screenshots/3swap.png)  
