@@ -242,7 +242,7 @@ $prefillApiAllowedIps = $db->getSetting('api_allowed_ips');
 			</tr>
 			<tr>
 				<th><?php echo LANG['import_license']; ?>:</th>
-				<td><input type="file" name="license_file"></td>
+				<td><input type="file" name="license_file" accept=".mplicense"></td>
 			</tr>
 			<tr>
 				<td><a href="https://georg-sieber.de/?page=masterplan" target="_blank"><?php echo LANG['buy_license']; ?></a></td>
