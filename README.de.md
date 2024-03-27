@@ -5,7 +5,7 @@
 ## Highlights
 - Die intuitive, browserbasierte Benutzeroberfläche erklärt sich von selbst und ist vollkommen plattformunabhängig.
 - Der Dienstplanalgorithmus erstellt einen Wochenplan vollautomatisch auf Basis der Wochen- und Monatsarbeitszeit sowie der festgelegten Beschränkungen eines Mitarbeiters. Sie können feingranular einstellen, welche Dienste ein Mitarbeiter an bestimmten Wochentagen nicht ausführen kann.
-- Mit dem optional aktivierbarem Self-Care-Portal können Mitarbeiter eigenständig ihre Dienste einsehen, tauschen, vakante Dienste besetzen und Abwesenheiten eintragen.
+- Mit dem optional aktivierbarem Self-Service-Portal können Mitarbeiter eigenständig ihre Dienste einsehen, tauschen, vakante Dienste besetzen und Abwesenheiten eintragen.
 - Exportfunktion - Ausgabe im PDF- und HTML-Format zum Ausdrucken oder Einbetten in Kollaborations-Systeme oder Webseiten.
 - LDAP-Anbindung für Benutzerimport möglich - binden Sie MASTERPLAN z.B. an Ihre Active-Directory-Domäne an und Mitarbeiter können sich mit dem selben Kennwort anmelden.
 - Versenden von Termineinladungen für geplante Dienste sind via E-Mail möglich (zum Eintragen in Thunderbird- oder Outlook-Kalender).

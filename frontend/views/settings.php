@@ -118,7 +118,7 @@ $prefillApiAllowedIps = $db->getSetting('api_allowed_ips');
 </div>
 
 <div class='contentbox small'>
-	<h2><?php echo LANG['self_care_portal']; ?></h2>
+	<h2><?php echo LANG['self_service_portal']; ?></h2>
 	<img class="contentbox-embleme" src="img/users.svg">
 	<form method="POST">
 		<div>

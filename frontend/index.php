@@ -117,7 +117,7 @@ ob_start();
 						<?php } ?>
 					</ul>
 				</li>
-				<li><a href='#'><?php echo LANG['self_care']; ?></a>
+				<li><a href='#'><?php echo LANG['self_service']; ?></a>
 					<ul>
 						<li><a href='?view=ownServices'><img src='img/checklist.svg'>&nbsp;<?php echo LANG['my_services_and_service_swap']; ?></a></li>
 						<li><a href='?view=viewIcsUrl'><img src='img/calendar.svg'>&nbsp;<?php echo LANG['services_as_calendar']; ?></a></li>

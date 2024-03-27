@@ -5,7 +5,7 @@
 ## Highlights
 - The intuitive, browser-based user interface is self-explanatory and is completely platform-independent.
 - The roster algorithm creates a weekly schedule fully automatically on the basis of the weekly and monthly working hours as well as the defined restrictions of an employee. You can fine-tune which services an employee cannot perform on certain days of the week.
-- With the self-care portal, which can be activated as an option, employees can independently view and swap their services, fill vacant services and enter absences.
+- With the self service portal, which can be activated as an option, employees can independently view and swap their services, fill vacant services and enter absences.
 - Export function - output in PDF and HTML format for printing or embedding in collaboration systems or websites.
 - LDAP connection for user import possible - connect MASTERPLAN e.g. to your Active Directory domain and employees can log in with the same password.
 - It is possible to send appointment invitations for planned services via e-mail (for entering in the Thunderbird or Outlook calendar).
